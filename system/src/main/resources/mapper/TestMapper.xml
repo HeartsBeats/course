@@ -3,7 +3,7 @@
 <mapper namespace="com.course.system.mapper.TestMapper" >
 
     <select id="list" resultType="com.course.system.domain.Test">
-        select `id`, `name` from `test`
+       select 'id','name' from test
     </select>
 
 </mapper>
