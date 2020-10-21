@@ -14,7 +14,7 @@ public class TextService {
     private TestMapper testMapper;
 
     public List<Test> list() {
-        return testMapper.list();
+        return testMapper.selectByExample(null);
     }
 
 }

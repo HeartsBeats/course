@@ -17,7 +17,6 @@ public interface TestMapper {
     int insertSelective(Test record);
 
     List<Test> selectByExample(TestExample example);
-    List<Test> list();
 
     Test selectByPrimaryKey(String id);
 

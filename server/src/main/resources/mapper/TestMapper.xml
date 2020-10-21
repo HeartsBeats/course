@@ -162,8 +162,4 @@
     where id = #{id,jdbcType=CHAR}
   </update>
 
-    <select id="list" resultType="com.course.server.domain.Test">
-       select id,name from test
-    </select>
-
 </mapper>
