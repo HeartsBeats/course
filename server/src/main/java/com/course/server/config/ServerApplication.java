@@ -1,4 +1,4 @@
-package com.course.server;
+package com.course.server.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
@@ -22,6 +22,6 @@ public class ServerApplication {
         SpringApplication app = new SpringApplication(ServerApplication.class);
         Environment env = app.run(args).getEnvironment();
         LOG.info("启动成功！！");
-        LOG.info("System地址: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
+        LOG.info("Server地址: \thttp://127.0.0.1:{}", env.getProperty("server.port"));
     }
 }

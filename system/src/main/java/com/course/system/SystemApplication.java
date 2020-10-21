@@ -12,7 +12,7 @@ import org.springframework.core.env.Environment;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan("com.course")
-@MapperScan("com.course.system.mapper")
+@MapperScan("com.course.server.mapper")
 public class SystemApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(SystemApplication.class);

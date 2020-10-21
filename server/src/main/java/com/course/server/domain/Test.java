@@ -26,7 +26,7 @@ public class Test implements Serializable {
     @Override
     public String toString() {
         return "Test{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 '}';
     }
