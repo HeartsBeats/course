@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: 'app',
+  name: "login"
 }
 </script>
 
+<style scoped>
+
+</style>
