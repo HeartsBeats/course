@@ -58,6 +58,12 @@
 				<artifactId>mybatis-spring-boot-starter</artifactId>
 				<version>${mybatis-version}</version>
 			</dependency>
+			<!-- mybatis分页插件PageHelper -->
+			<dependency>
+				<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper-spring-boot-starter</artifactId>
+				<version>1.2.10</version>
+			</dependency>
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
