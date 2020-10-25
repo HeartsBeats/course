@@ -365,7 +365,7 @@
             <b class="arrow"></b>
           </li>
 
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 系统管理 </span>
@@ -476,9 +476,22 @@
  export default {
    name: "admin",
    mounted:function () {
-     var body = "body";
+     let body = "body";
+     let _this = this;
      $(body).removeClass("login-layout light-login");
      $(body).attr("class", "no-skin");
+     _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar");
+   },
+   watch: {
+     $route: {
+        handler:function(val, oldVal){
+          console.log("---->页面跳转：", val, oldVal);
+          let _this = this;
+          _this.$nextTick(function (){    //页面加载完成后执行
+            _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar");
+          })
+        }
+     }
    },
    methods:{
      login(){

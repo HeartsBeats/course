@@ -979,9 +979,9 @@
 
 <script>
 export default {
-  name: "welcome",
+  name: "chapter",
   mounted: function () {
-    this.$parent.activeSidebar("business-chapter-sidebar")
+    // this.$parent.activeSidebar("business-chapter-sidebar")
   },
   methods: {}
 }
