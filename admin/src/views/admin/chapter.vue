@@ -29,11 +29,8 @@
       <td>{{ chapter.courseId }}</td>
       <td>
         <div class="hidden-sm hidden-xs btn-group">
-          <button class="btn btn-xs btn-success">
-            <i class="ace-icon fa fa-check bigger-120"></i>
-          </button>
 
-          <button class="btn btn-xs btn-info">
+          <button v-on:click="edit(chapter)" class="btn btn-xs btn-info">
             <i class="ace-icon fa fa-pencil bigger-120"></i>
           </button>
 
@@ -137,9 +134,15 @@ export default {
   methods: {
     add() {
       let _this = this;
+      _this.chapter = {};
+      $("#form-modal").modal("show");
+
+    },
+    edit(chapter){
+      let _this = this;
+      _this.chapter = $.extend({}, chapter);
       $("#form-modal").modal("show");
     },
-
     list(page) {
       let _this = this;
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',{
