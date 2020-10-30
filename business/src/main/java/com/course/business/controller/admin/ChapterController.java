@@ -20,7 +20,7 @@ public class ChapterController {
     @Resource
     private ChapterService chapterService;
 
-    private String fieldName = "大章";
+    public static final String BUSINESS_NAME = "大章";
 
     private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
 
