@@ -11,7 +11,7 @@ Toast = {
 
   error: function (message) {
     Swal.fire({
-      position: 'top-end',
+      position: 'botton-end',
       icon: 'error',
       title: message,
       showConfirmButton: false,
@@ -21,7 +21,7 @@ Toast = {
 
   warning: function (message) {
     Swal.fire({
-      position: 'top-end',
+      position: 'botton-end',
       icon: 'warning',
       title: message,
       showConfirmButton: false,
