@@ -12,70 +12,70 @@
       </button>
     </p>
     <pagination ref="pagination" v-bind:list="list" v-bind:itemCount="8"></pagination>
-  <table id="simple-table" class="table  table-bordered table-hover">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>名称</th>
-      <th>课程ID</th>
-      <th>操作</th>
-    </tr>
-    </thead>
+    <table id="simple-table" class="table  table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>课程ID</th>
+        <th>操作</th>
+      </tr>
+      </thead>
 
-    <tbody>
-    <tr v-for="chapter in chapters">
-      <td>{{ chapter.id }}</td>
-      <td>{{ chapter.name }}</td>
-      <td>{{ chapter.courseId }}</td>
-      <td>
-        <div class="hidden-sm hidden-xs btn-group">
+      <tbody>
+      <tr v-for="chapter in chapters">
+        <td>{{ chapter.id }}</td>
+        <td>{{ chapter.name }}</td>
+        <td>{{ chapter.courseId }}</td>
+        <td>
+          <div class="hidden-sm hidden-xs btn-group">
 
-          <button v-on:click="edit(chapter)" class="btn btn-xs btn-info">
-            <i class="ace-icon fa fa-pencil bigger-120"></i>
-          </button>
-
-          <button v-on:click="del(chapter.id)" class="btn btn-xs btn-danger">
-            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-          </button>
-        </div>
-
-        <div class="hidden-md hidden-lg">
-          <div class="inline pos-rel">
-            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-              <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+            <button v-on:click="edit(chapter)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
 
-            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-              <li>
-                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+            <button v-on:click="del(chapter.id)" class="btn btn-xs btn-danger">
+              <i class="ace-icon fa fa-trash-o bigger-120"></i>
+            </button>
+          </div>
+
+          <div class="hidden-md hidden-lg">
+            <div class="inline pos-rel">
+              <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+              </button>
+
+              <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                <li>
+                  <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
                                   <span class="blue">
                                     <i class="ace-icon fa fa-search-plus bigger-120"></i>
                                   </span>
-                </a>
-              </li>
+                  </a>
+                </li>
 
-              <li>
-                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                <li>
+                  <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
                                   <span class="green">
                                     <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
                                   </span>
-                </a>
-              </li>
+                  </a>
+                </li>
 
-              <li>
-                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                <li>
+                  <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
                                   <span class="red">
                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                   </span>
-                </a>
-              </li>
-            </ul>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -93,9 +93,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label  class="col-sm-2 control-label">课程ID</label>
+                <label class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
-                  <input v-model="chapter.courseId"  class="form-control" placeholder="课程ID">
+                  <input v-model="chapter.courseId" class="form-control" placeholder="课程ID">
                 </div>
               </div>
             </form>
@@ -112,12 +112,13 @@
 
 <script>
 import Pagination from "../../components/pagination";
+
 export default {
   name: "chapter",
   components: {Pagination},
   data: function () {
     return {
-      chapter:{},
+      chapter: {},
       chapters: []
     }
   },
@@ -128,17 +129,26 @@ export default {
     // this.$parent.activeSidebar("business-chapter-sidebar")
   },
   methods: {
+    /**
+     * 点击【新增】
+     */
     add() {
       let _this = this;
       _this.chapter = {};
       $("#form-modal").modal("show");
 
     },
-    edit(chapter){
+    /**
+     * 点击【编辑】
+     */
+    edit(chapter) {
       let _this = this;
       _this.chapter = $.extend({}, chapter);
       $("#form-modal").modal("show");
     },
+    /**
+     * 点击【删除】
+     */
     del(id) {
       let _this = this;
       Confirm.show("删除大章后不可恢复，确认删除？", function () {
@@ -154,10 +164,13 @@ export default {
         })
       })
     },
+    /**
+     * 点击【刷新】
+     */
     list(page) {
       let _this = this;
       Loading.show();
-      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list',{
+      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
         page: page,
         size: _this.$refs.pagination.size,
       }).then((response) => {
@@ -167,7 +180,10 @@ export default {
         _this.$refs.pagination.render(page, response.data.content.total);
       })
     },
-    save(page){
+    /**
+     * 点击【修改】
+     */
+    save(page) {
       let _this = this;
       // 保存校验
       if (!Validator.require(_this.chapter.name, "名称")
@@ -176,14 +192,14 @@ export default {
         return;
       }
       Loading.show();
-      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save',_this.chapter).then((response)=>{
+      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter).then((response) => {
         console.log("保存大章列表结果：", response);
-          if(response.data.success){
-            Loading.hide();
-            $("#form-modal").modal("hide");
-            _this.list(1);
-            Toast.success("保存成功")
-          }
+        if (response.data.success) {
+          Loading.hide();
+          $("#form-modal").modal("hide");
+          _this.list(1);
+          Toast.success("保存成功")
+        }
       })
     }
   }

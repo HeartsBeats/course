@@ -24,6 +24,12 @@ public class ChapterController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ChapterController.class);
 
+    /*
+     *列表查询
+     * @Author: YJQ
+     * @Date: 2020-10-30 20:18
+     */
+
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         LOG.info("pageDto: {}", pageDto);
@@ -32,6 +38,11 @@ public class ChapterController {
         responseDto.setContent(pageDto);
         return responseDto;
     }
+    /*
+     *  数据更新和存储
+     * @Author: YJQ
+     * @Date: 2020-10-30 20:18
+     */
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody ChapterDto chapterDto) {
@@ -45,6 +56,11 @@ public class ChapterController {
         responseDto.setContent(chapterDto);
         return responseDto;
     }
+    /*
+     *  根据id删除数据
+     * @Author: YJQ
+     * @Date: 2020-10-30 20:19
+     */
 
     @DeleteMapping("/delete/{id}")
     public ResponseDto delete(@PathVariable String id) {

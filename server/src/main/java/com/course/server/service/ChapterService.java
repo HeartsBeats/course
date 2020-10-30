@@ -10,12 +10,11 @@ import com.course.server.util.CopyUtils;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -32,31 +31,43 @@ public class ChapterService {
         List<Chapter> chapters = chapterMapper.selectByExample(chapterExample);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapters);
         pageDto.setTotal(pageInfo.getTotal());
-        List<ChapterDto>  chapterDtoList = CopyUtils.copyList(chapters,ChapterDto.class);
+        List<ChapterDto> chapterDtoList = CopyUtils.copyList(chapters, ChapterDto.class);
         pageDto.setList(chapterDtoList);
     }
+
     /*
      *  保存数据
      * @Author: YJQ
      * @Date: 2020-10-27 09:12
      */
-    public void save(ChapterDto chapterDto){
-        Chapter chapter = CopyUtils.copy(chapterDto,Chapter.class);
-        if(StringUtils.isEmpty(chapter.getId())){
+    public void save(ChapterDto chapterDto) {
+        Chapter chapter = CopyUtils.copy(chapterDto, Chapter.class);
+        if (StringUtils.isEmpty(chapter.getId())) {
             this.insert(chapter);
-        }else {
+        } else {
             this.update(chapter);
         }
     }
-    public void update(Chapter chapter){
+
+    /**
+     * 更新大章数据
+     */
+    public void update(Chapter chapter) {
         chapterMapper.updateByPrimaryKey(chapter);
     }
 
-    public void insert(Chapter chapter){
+    /*
+     *  大章数据插入
+     */
+    public void insert(Chapter chapter) {
         chapter.setId(UuidUtil.getShortUuid());
         chapterMapper.insert(chapter);
     }
-    public void delete(String id){
+
+    /**
+     * 删除大章数据
+     */
+    public void delete(String id) {
         chapterMapper.deleteByPrimaryKey(id);
     }
 
