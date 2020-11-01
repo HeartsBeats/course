@@ -31,14 +31,14 @@
 
       <tbody>
       <tr v-for="section in sections">
-        <td>{{ section.id }}</td>
-        <td>{{ section.title }}</td>
-        <td>{{ section.courseId }}</td>
-        <td>{{ section.chapterId }}</td>
-        <td>{{ section.video }}</td>
-        <td>{{ section.time }}</td>
-        <td>{{ section.charge }}</td>
-        <td>{{ section.sort }}</td>
+        <td>{{section.id}}</td>
+        <td>{{section.title}}</td>
+        <td>{{section.courseId}}</td>
+        <td>{{section.chapterId}}</td>
+        <td>{{section.video}}</td>
+        <td>{{section.time}}</td>
+        <td>{{CHARGE | optionKV(section.charge)}}</td>
+        <td>{{section.sort}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
             <button v-on:click="edit(section)" class="btn btn-xs btn-info">
@@ -57,8 +57,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
           </div>
           <div class="modal-body">
@@ -96,7 +95,9 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
-                  <input v-model="section.charge" class="form-control">
+                  <select v-model="section.charge" class="form-control">
+                    <option v-for="o in CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
@@ -119,17 +120,17 @@
 
 <script>
 import Pagination from "../../components/pagination";
-
 export default {
   components: {Pagination},
   name: "section",
-  data: function () {
+  data: function() {
     return {
       section: {},
-      sections: []
+      sections: [],
+      CHARGE: [{key:"C", value:"收费"},{key:"F", value:"免费"}],
     }
   },
-  mounted: function () {
+  mounted: function() {
     let _this = this;
     _this.$refs.pagination.size = 5;
     _this.list(1);
@@ -165,7 +166,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/list', {
         page: page,
         size: _this.$refs.pagination.size,
-      }).then((response) => {
+      }).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.sections = resp.content.list;
@@ -190,7 +191,7 @@ export default {
       }
 
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response)=>{
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -210,7 +211,7 @@ export default {
       let _this = this;
       Confirm.show("删除小节后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response) => {
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
