@@ -20,7 +20,7 @@ public class ValidatorUtil {
      * @Date: 2020-10-30 17:26
      */
 
-    public static void require(String str, String fieldName) {
+    public static void require(Object str, String fieldName) {
         if (StringUtils.isEmpty(str)) {
             throw new ValidatorException(fieldName + "不能为空");
         }
