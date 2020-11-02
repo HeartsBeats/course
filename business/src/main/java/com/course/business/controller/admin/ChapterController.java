@@ -2,10 +2,9 @@ package com.course.business.controller.admin;
 
 
 import com.course.server.dto.ChapterDto;
-import com.course.server.dto.PageDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.ChapterService;
-import com.course.server.util.UuidUtil;
 import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +30,12 @@ public class ChapterController {
      */
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
-        LOG.info("pageDto: {}", pageDto);
-        chapterService.list(pageDto);
+    public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto) {
+        LOG.info("pageDto: {}", chapterPageDto);
+        ValidatorUtil.require(chapterPageDto.getCourseId(),"课程ID");
+        chapterService.list(chapterPageDto);
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(pageDto);
+        responseDto.setContent(chapterPageDto);
         return responseDto;
     }
     /*

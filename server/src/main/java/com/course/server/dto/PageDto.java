@@ -8,19 +8,19 @@ public class PageDto<T> {
     /**
      * 当前页码
      */
-    private Integer page;
+    protected Integer page;
     /**
      * 每页条数
      */
-    private Integer size;
+    protected Integer size;
     /**
      * 总条数
      */
-    private long total;
+    protected long total;
     /**
      * 查询数据集合
      */
-    private List<T> list;
+    protected List<T> list;
 
     public Integer getPage() {
         return page;
