@@ -10,17 +10,21 @@ import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
-        import java.util.Date;
 
 @Service
 public class SectionService {
 
     @Resource
     private SectionMapper sectionMapper;
+
+    @Resource
+    private CourseService courseService;
 
         /**
         * 列表查询
@@ -46,6 +50,7 @@ public class SectionService {
         /**
         * 保存，id有值时更新，无值时新增
         */
+        @Transactional
         public void save(SectionDto sectionDto) {
             Section section = CopyUtils.copy(sectionDto, Section.class);
             if (StringUtils.isEmpty(sectionDto.getId())) {
@@ -53,6 +58,7 @@ public class SectionService {
             } else {
             this.update(section);
             }
+            courseService.updateTime(sectionDto.getCourseId());
         }
 
         /**
