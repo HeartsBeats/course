@@ -1,7 +1,6 @@
 package com.course.business.controller.admin;
 
 import com.course.server.dto.CategoryDto;
-import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.CategoryService;
 import com.course.server.util.ValidatorUtil;
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/category")
@@ -24,11 +24,11 @@ public class CategoryController {
     /**
     * 列表查询
     */
-    @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    @PostMapping("/all")
+    public ResponseDto list() {
         ResponseDto responseDto = new ResponseDto();
-        categoryService.list(pageDto);
-        responseDto.setContent(pageDto);
+        List<CategoryDto> categoryDtoList = categoryService.all();
+        responseDto.setContent(categoryDtoList);
         return responseDto;
     }
 
@@ -38,11 +38,9 @@ public class CategoryController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody CategoryDto categoryDto) {
     // 保存校验
-                ValidatorUtil.require(categoryDto.getId(), "id");
                 ValidatorUtil.require(categoryDto.getParent(), "父id");
                 ValidatorUtil.require(categoryDto.getName(), "名称");
                 ValidatorUtil.length(categoryDto.getName(), "名称", 1, 50);
-
         ResponseDto responseDto = new ResponseDto();
         categoryService.save(categoryDto);
         responseDto.setContent(categoryDto);

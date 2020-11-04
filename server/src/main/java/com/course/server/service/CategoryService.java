@@ -3,12 +3,9 @@ package com.course.server.service;
 import com.course.server.domain.Category;
 import com.course.server.domain.CategoryExample;
 import com.course.server.dto.CategoryDto;
-import com.course.server.dto.PageDto;
 import com.course.server.mapper.CategoryMapper;
 import com.course.server.util.CopyUtils;
 import com.course.server.util.UuidUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -25,16 +22,12 @@ public class CategoryService {
         /**
         * 列表查询
         */
-        public void list(PageDto pageDto) {
-            PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        public List<CategoryDto> all() {
             CategoryExample categoryExample = new CategoryExample();
-                    categoryExample.setOrderByClause("sort asc");
+            categoryExample.setOrderByClause("sort asc");
             List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
-            PageInfo<Category> pageInfo = new PageInfo<>(categoryList);
-            pageDto.setTotal(pageInfo.getTotal());
-            List
-            <CategoryDto> categoryDtoList = CopyUtils.copyList(categoryList, CategoryDto.class);
-                pageDto.setList(categoryDtoList);
+            List<CategoryDto> categoryDtoList = CopyUtils.copyList(categoryList, CategoryDto.class);
+            return categoryDtoList;
         }
 
         /**
