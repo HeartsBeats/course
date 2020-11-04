@@ -163,6 +163,7 @@ export default {
       COURSE_CHARGE: COURSE_CHARGE,
       COURSE_STATUS: COURSE_STATUS,
       category:{},
+      tree:{},
     }
   },
   mounted: function() {
@@ -180,6 +181,7 @@ export default {
      */
     add() {
       let _this = this;
+      _this.tree.checkAllNodes(false);
       _this.course = {};
       $("#form-modal").modal("show");
     },
@@ -189,6 +191,7 @@ export default {
      */
     edit(course) {
       let _this = this;
+      _this.listCategory(course.id);
       _this.course = $.extend({}, course);
       $("#form-modal").modal("show");
     },
@@ -214,7 +217,7 @@ export default {
     /**
      * 点击【保存】
      */
-    save(page) {
+    save() {
       let _this = this;
 
       // 保存校验
@@ -226,6 +229,13 @@ export default {
       ) {
         return;
       }
+      // 校验是否选好分类
+      let categorys = _this.tree.getCheckedNodes();
+      if (Tool.isEmpty(categorys)) {
+        Toast.warning("请选择分类！");
+        return;
+      }
+      _this.course.categorys = categorys;
 
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save', _this.course).then((response)=>{
@@ -267,6 +277,7 @@ export default {
       SessionStorage.set("course", course);
       _this.$router.push("/business/chapter");
     },
+
     /**
      *  获取所有分类信息
      */
@@ -279,6 +290,29 @@ export default {
         _this.categorys = resp.content;
 
         _this.initTree();
+      })
+    },
+
+    /**
+     * 查找课程下所有分类
+     * @param courseId
+     */
+    listCategory(courseId) {
+      let _this = this;
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list-category/' + courseId).then((res)=>{
+        Loading.hide();
+        console.log("查找课程下所有分类结果：", res);
+        let response = res.data;
+        let categorys = response.content;
+
+        // 勾选查询到的分类,先将树中勾选清空，再根据查询分类数据进行勾选
+        _this.tree.checkAllNodes(false);
+        for (let i = 0; i < categorys.length; i++) {
+          //比对节点数据，进行勾选
+          let node = _this.tree.getNodeByParam("id", categorys[i].categoryId);
+          _this.tree.checkNode(node, true);
+        }
       })
     },
     /**
@@ -301,7 +335,8 @@ export default {
       };
 
       let zNodes = _this.categorys;
-      $.fn.zTree.init($("#tree"), setting, zNodes);
+      // 存储分类数据
+      _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
     }
   }
 }

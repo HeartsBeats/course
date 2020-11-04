@@ -13,7 +13,9 @@ import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,8 @@ public class CourseService {
     @Resource
     private MyCourseMapper  myCourseMapper;
 
+    @Resource
+    private CourseCategoryService courseCategoryService;
         /**
         * 列表查询
         */
@@ -47,6 +51,7 @@ public class CourseService {
         /**
         * 保存，id有值时更新，无值时新增
         */
+        @Transactional
         public void save(CourseDto courseDto) {
             Course course = CopyUtils.copy(courseDto, Course.class);
             if (StringUtils.isEmpty(courseDto.getId())) {
@@ -54,6 +59,7 @@ public class CourseService {
             } else {
             this.update(course);
             }
+            courseCategoryService.saveBatch(courseDto.getId(),courseDto.getCategorys());
         }
 
         /**
