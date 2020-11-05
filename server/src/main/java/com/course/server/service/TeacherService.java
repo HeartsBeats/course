@@ -21,6 +21,15 @@ public class TeacherService {
     @Resource
     private TeacherMapper teacherMapper;
 
+
+    /**
+     * 列表查询
+     */
+    public List<TeacherDto> all() {
+        TeacherExample teacherExample = new TeacherExample();
+        List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
+        return CopyUtils.copyList(teacherList, TeacherDto.class);
+    }
         /**
         * 列表查询
         */

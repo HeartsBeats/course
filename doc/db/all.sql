@@ -20,6 +20,9 @@ create table course (
 INSERT INTO course (id, name, summary, time, price, image, level, charge, status, enroll, sort, created_at, updated_at)
 VALUES ('00000001', '测试课程01', '这是一门测试课程', 7200, 19.9, '', 1, 'C', 'D', 100, 0, now(), now());
 
+alter table `course` add column (`teacher_id` char(8) comment '讲师|teacher.id');
+
+#  大章
 drop table if exists `chapter`;
 create table `chapter`
 (
