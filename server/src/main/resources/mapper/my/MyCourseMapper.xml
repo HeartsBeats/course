@@ -6,5 +6,20 @@
         update course c set `time` = (select sum(`time`) from `section` where course_id = #{courseId})
         where c.id = #{courseId}
     </update>
+     <update id="updateSort" parameterType="com.course.server.dto.SortDto">
+            update course set `sort`= #{newSort} where id = #{id}
+        </update>
 
+       <!-- <![CDATA[]]> 使包括的内容不被xml解析解析 例如  < > = -->
+        <update id="moveSortsBackward" parameterType="com.course.server.dto.SortDto">
+            <![CDATA[
+            update course set `sort`= (`sort`+1) where `sort` >= #{newSort} and `sort` <= #{oldSort} and id != #{id}
+            ]]>
+        </update>
+
+        <update id="moveSortsForward" parameterType="com.course.server.dto.SortDto">
+            <![CDATA[
+            update course set `sort`= (`sort`-1) where `sort` <= #{newSort} and `sort` >= #{oldSort} and id != #{id}
+            ]]>
+        </update>
 </mapper>

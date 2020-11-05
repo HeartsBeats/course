@@ -96,4 +96,17 @@ public class CourseController {
         courseService.saveContent(courseContentDto);
         return responseDto;
     }
+    /**
+     * 更新排序请求
+     * @Author: YJQ
+     * @Date: 2020-11-5 18:39
+     */
+    @RequestMapping(value = "/sort")
+    public ResponseDto sort(@RequestBody SortDto sortDto) {
+        LOG.info("更新排序");
+        ResponseDto responseDto = new ResponseDto();
+        courseService.sort(sortDto);
+        return responseDto;
+    }
+
 }
