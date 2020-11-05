@@ -123,19 +123,37 @@ insert into `category` (id, parent, name, sort) values ('00000702', '00000700', 
 insert into `category` (id, parent, name, sort) values ('00000703', '00000700', 'mongodb', 703);
 # 课程分类
 drop table if exists `course_category`;
-create table `course_category` (
-                                   `id` char(8) not null default '' comment 'id',
-                                   `course_id` char(8) comment '课程|course.id',
-                                   `category_id` char(8) comment '分类|course.id',
-                                   primary key (`id`)
-) engine=innodb default charset=utf8mb4 comment='课程分类';
+create table `course_category`
+(
+    `id`          char(8) not null default '' comment 'id',
+    `course_id`   char(8) comment '课程|course.id',
+    `category_id` char(8) comment '分类|course.id',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='课程分类';
 # 课程内容
 drop table if exists `course_content`;
-create table `course_content` (
-                                  `id` char(8) not null default '' comment '课程id',
-                                  `content` mediumtext not null comment '课程内容',
-                                  primary key (`id`)
-) engine=innodb default charset=utf8mb4 comment='课程内容';
+create table `course_content`
+(
+    `id`      char(8)    not null default '' comment '课程id',
+    `content` mediumtext not null comment '课程内容',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='课程内容';
+-- 讲师
+drop table if exists `teacher`;
+create table `teacher`
+(
+    `id`       char(8)     not null default '' comment 'id',
+    `name`     varchar(50) not null comment '姓名',
+    `nickname` varchar(50) comment '昵称',
+    `image`    varchar(100) comment '头像',
+    `position` varchar(50) comment '职位',
+    `motto`    varchar(50) comment '座右铭',
+    `intro`    varchar(500) comment '简介',
+    primary key (`id`)
+) engine = innodb
+  default charset = utf8mb4 comment ='讲师';
 
 -- -------------------------测试
 drop table if exists `test`;

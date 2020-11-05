@@ -438,6 +438,14 @@
 
                 <b class="arrow"></b>
               </li>
+              <li class="" id="business-teacher-sidebar">
+                <router-link to="/business/course">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  讲师管理
+                </router-link>
+
+                <b class="arrow"></b>
+              </li>
             </ul>
           </li>
 
