@@ -30,6 +30,7 @@ public class TeacherController {
         ResponseDto responseDto = new ResponseDto();
         List<TeacherDto> teacherDtoList = teacherService.all();
         responseDto.setContent(teacherDtoList);
+        LOG.info("teacher",responseDto);
         return responseDto;
     }
 

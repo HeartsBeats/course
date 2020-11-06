@@ -50,6 +50,7 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         courseService.save(courseDto);
         responseDto.setContent(courseDto);
+        LOG.info("保存结果",responseDto);
         return responseDto;
     }
 

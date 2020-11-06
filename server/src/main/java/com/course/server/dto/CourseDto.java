@@ -59,6 +59,12 @@ public class CourseDto {
         private Integer enroll;
 
         /**
+         *   讲师
+         */
+        private TeacherDto teacher;
+
+        private String teacherId;
+        /**
         * 顺序
         */
         private Integer sort;
@@ -192,6 +198,22 @@ public class CourseDto {
                 this.categorys = categorys;
         }
 
+        public TeacherDto getTeacher() {
+                return teacher;
+        }
+
+        public void setTeacher(TeacherDto teacher) {
+                this.teacher = teacher;
+        }
+
+        public String getTeacherId() {
+                return teacherId;
+        }
+
+        public void setTeacherId(String teacherId) {
+                this.teacherId = teacherId;
+        }
+
         @Override
         public String toString() {
                 final StringBuffer sb = new StringBuffer("CourseDto{");
@@ -205,6 +227,8 @@ public class CourseDto {
                 sb.append(", charge='").append(charge).append('\'');
                 sb.append(", status='").append(status).append('\'');
                 sb.append(", enroll=").append(enroll);
+                sb.append(", teacher=").append(teacher);
+                sb.append(", teacherId='").append(teacherId).append('\'');
                 sb.append(", sort=").append(sort);
                 sb.append(", createdAt=").append(createdAt);
                 sb.append(", updatedAt=").append(updatedAt);
