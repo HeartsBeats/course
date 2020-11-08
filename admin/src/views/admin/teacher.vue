@@ -22,9 +22,7 @@
                  src="/ace/assets/images/avatars/profile-pic.jpg" v-bind:title="teacher.intro"/>
             <img v-show="teacher.image" class="media-object" v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
           </span>
-
           <div class="space-4"></div>
-
           <div class="width-85 label label-info label-xlg arrowed-in arrowed-in-right">
             <div class="inline position-relative">
               <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
@@ -85,9 +83,16 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <input type="file" v-on:change="uploadImage()" id="file-upload-input">
-                  <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty" src="/static/image/讲师头像/头像1.jpg" v-bind:title="teacher.intro"/>
-                  <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty" v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
+                  <button type="button" v-on:click="selectImage()" class="btn btn-white btn-default btn-round">
+                    <i class="ace-icon fa fa-upload"></i>
+                    上传头像
+                  </button>
+                  <input class="hidden" type="file" v-on:change="uploadImage()" id="file-upload-input">
+                  <div v-show="teacher.image" class="row">
+                    <div class="col-md-4">
+                      <img v-bind:src="teacher.image" class="img-responsive">
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
@@ -241,6 +246,9 @@ export default {
         _this.teacher.image = image;
 
       });
+    },
+    selectImage () {
+      $("#file-upload-input").trigger("click");
     }
 
   }
