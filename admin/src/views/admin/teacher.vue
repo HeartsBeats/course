@@ -19,10 +19,13 @@
         <div>
           <span class="profile-picture">
             <img v-show="!teacher.image" class="editable img-responsive editable-click editable-empty"
-                 src="/ace/assets/images/avatars/profile-pic.jpg" v-bind:title="teacher.intro"/>
-            <img v-show="teacher.image" class="media-object" v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
+                 src="/static/image/讲师头像/头像1.jpg" v-bind:title="teacher.intro"/>
+            <img v-show="teacher.image" class="editable img-responsive editable-click editable-empty"
+                 v-bind:src="teacher.image" v-bind:title="teacher.intro"/>
           </span>
+
           <div class="space-4"></div>
+
           <div class="width-85 label label-info label-xlg arrowed-in arrowed-in-right">
             <div class="inline position-relative">
               <a href="javascript:;" class="user-title-label dropdown-toggle" data-toggle="dropdown">
@@ -83,9 +86,10 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <file v-bind:id="'image-upload'"
+                  <file v-bind:input-id="'image-upload'"
                         v-bind:text="'上传头像'"
                         v-bind:suffixs="['jpg', 'jpeg', 'png']"
+                        v-bind:use="FILE_USE.TEACHER.key"
                         v-bind:after-upload="afterUpload"></file>
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
@@ -135,6 +139,7 @@ export default {
     return {
       teacher: {},
       teachers: [],
+      FILE_USE: FILE_USE,
     }
   },
   mounted: function () {

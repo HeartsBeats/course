@@ -40,6 +40,9 @@ export default {
       type: Function,
       default: null
     },
+    use : {
+      default: ""
+    },
   },
   data: function () {
     return {
@@ -54,6 +57,7 @@ export default {
       // 判断文件格式
       let suffixs = _this.suffixs;
       let fileName = file.name;
+      let use = _this.use;
       let suffix = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length).toLowerCase();
       let validateSuffix = false;
       for (let i = 0; i < suffixs.length; i++) {
@@ -70,6 +74,7 @@ export default {
 
       // key："file"必须和后端controller参数名一致
       formData.append('file', file);
+      formData.append('use', use);
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
         Loading.hide();
