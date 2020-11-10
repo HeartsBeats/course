@@ -90,7 +90,17 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <input v-model="section.video" class="form-control">
+                  <file v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['mp4']"
+                        v-bind:text="上传视频"
+                        v-bind:use="FILE_USE.COURSE.key"
+                        v-bind:input-id="video-upload">
+                  </file>
+                  <div v-show="section.video" class="row">
+                    <div class="col-md-9">
+                      <video v-bind:src="section.video" id="video" controls="controls"></video>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
@@ -127,19 +137,22 @@
 
 <script>
 import Pagination from "../../components/pagination";
+import File from "../../components/file";
+
 export default {
-  components: {Pagination},
+  components: {Pagination, File},
   name: "section",
-  data: function() {
+  data: function () {
     return {
       section: {},
       sections: [],
-      CHARGE: [{key:"C", value:"收费"},{key:"F", value:"免费"}],
-      course:{},
-      chapter:{},
+      CHARGE: [{key: "C", value: "收费"}, {key: "F", value: "免费"}],
+      course: {},
+      chapter: {},
+      FILE_USE: FILE_USE,
     }
   },
-  mounted: function() {
+  mounted: function () {
     let _this = this;
     _this.$refs.pagination.size = 5;
     let course = SessionStorage.get(SESSION_KEY_COURSE) || {};
@@ -155,6 +168,7 @@ export default {
 
   },
   methods: {
+
     /**
      * 点击【新增】
      */
@@ -184,7 +198,7 @@ export default {
         size: _this.$refs.pagination.size,
         courseId: _this.course.id,
         chapterId: _this.chapter.id
-      }).then((response)=>{
+      }).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.sections = resp.content.list;
@@ -210,7 +224,7 @@ export default {
       _this.section.courseId = _this.course.id;
       _this.section.chapterId = _this.chapter.id;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -230,7 +244,7 @@ export default {
       let _this = this;
       Confirm.show("删除小节后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response)=>{
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response) => {
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
@@ -239,7 +253,28 @@ export default {
           }
         })
       });
-    }
+    },
+    afterUpload(resp) {
+      let _this = this;
+      let video = resp.content.path;
+      _this.section.video = video;
+      _this.getTime();
+    },
+    /**
+     * 获取时长
+     */
+    getTime() {
+      let _this = this;
+      let ele = document.getElementById("video");
+      _this.section.time = parseInt(ele.duration, 10);
+    },
   }
 }
 </script>
+<style scoped>
+video {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+</style>

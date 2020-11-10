@@ -79,7 +79,7 @@ public class UploadController {
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
-        fileDto.setPath(FILE_PATH+path);
+        fileDto.setPath(FILE_DOMAIN+path);
         responseDto.setContent(fileDto);
         return responseDto;
     }
