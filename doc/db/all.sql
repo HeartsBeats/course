@@ -49,19 +49,21 @@ insert into `chapter` (id, course_id, name) values ('00000013', '00000000', '测
 insert into `chapter` (id, course_id, name) values ('00000014', '00000000', '测试大章14');
 -- 小节
 DROP TABLE IF EXISTS `section`;
-CREATE TABLE `section` (
-                           `id` CHAR(8) NOT NULL DEFAULT '' COMMENT 'ID',
-                           `title` VARCHAR(50) NOT NULL COMMENT '标题',
-                           `course_id` CHAR(8) COMMENT '课程|course.id',
-                           `chapter_id` CHAR(8) COMMENT '大章|chapter.id',
-                           `video` VARCHAR(200) COMMENT '视频',
-                           `time` INT COMMENT '时长|单位秒',
-                           `charge` CHAR(1) COMMENT '收费|C 收费；F 免费',
-                           `sort` INT COMMENT '顺序',
-                           `created_at` DATETIME(3) COMMENT '创建时间',
-                           `updated_at` DATETIME(3) COMMENT '修改时间',
-                           PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='小节';
+CREATE TABLE `section`
+(
+    `id`         CHAR(8)     NOT NULL DEFAULT '' COMMENT 'ID',
+    `title`      VARCHAR(50) NOT NULL COMMENT '标题',
+    `course_id`  CHAR(8) COMMENT '课程|course.id',
+    `chapter_id` CHAR(8) COMMENT '大章|chapter.id',
+    `video`      VARCHAR(200) COMMENT '视频',
+    `time`       INT COMMENT '时长|单位秒',
+    `charge`     CHAR(1) COMMENT '收费|C 收费；F 免费',
+    `sort`       INT COMMENT '顺序',
+    `created_at` DATETIME(3) COMMENT '创建时间',
+    `updated_at` DATETIME(3) COMMENT '修改时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='小节';
 
 INSERT INTO `section` (id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at)
 VALUES ('00000001', '测试小节01', '00000001', '00000000', '', 500, 'F', 1, now(), now());
@@ -164,18 +166,26 @@ insert into `teacher` (id,name,nickname,image,position,motto ,intro ) values ('0
 
 -- 文件
 drop table if exists `file`;
-create table `file` (
-                        `id` char(8) not null default '' comment 'id',
-                        `path` varchar(100) not null comment '相对路径',
-                        `name` varchar(100) comment '文件名',
-                        `suffix` varchar(10) comment '后缀',
-                        `size` int comment '大小|字节B',
-                        `use` char(1) comment '用途|枚举[FileUseEnum]：COURSE("C", "讲师"), TEACHER("T", "课程")',
-                        `created_at` datetime(3) comment '创建时间',
-                        `updated_at` datetime(3) comment '修改时间',
-                        primary key (`id`),
-                        unique key `path_unique` (`path`)
-) engine=innodb default charset=utf8mb4 comment='文件';
+create table `file`
+(
+    `id`         char(8)      not null default '' comment 'id',
+    `path`       varchar(100) not null comment '相对路径',
+    `name`       varchar(100) comment '文件名',
+    `suffix`     varchar(10) comment '后缀',
+    `size`       int comment '大小|字节B',
+    `use`        char(1) comment '用途|枚举[FileUseEnum]：COURSE("C", "讲师"), TEACHER("T", "课程")',
+    `created_at` datetime(3) comment '创建时间',
+    `updated_at` datetime(3) comment '修改时间',
+    primary key (`id`),
+    unique key `path_unique` (`path`)
+) engine = innodb
+  default charset = utf8mb4 comment ='文件';
+
+alter table `file` add column (`shard_index` int comment '已上传分片');
+alter table `file` add column (`shard_size` int comment '分片大小|B');
+alter table `file` add column (`shard_total` int comment '分片总数');
+alter table `file` add column (`key` varchar(32) comment '文件标识');
+alter table `file` add unique key key_unique (`key`);
 -- 课程内容文件
 drop table if exists `course_content_file`;
 create table `course_content_file`
