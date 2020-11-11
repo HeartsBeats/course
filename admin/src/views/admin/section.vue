@@ -94,7 +94,7 @@
                         v-bind:suffixs="['mp4']"
                         v-bind:text="上传视频"
                         v-bind:use="FILE_USE.COURSE.key"
-                        v-bind:input-id="video-upload">
+                        v-bind:input-id="'video-upload'">
                   </file>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
