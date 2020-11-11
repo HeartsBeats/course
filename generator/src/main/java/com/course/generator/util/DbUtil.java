@@ -26,7 +26,7 @@ public class DbUtil {
         return conn;
     }
 
-    /*
+    /**
      * 获得表注释
      * @param tableName
      * @return
@@ -50,7 +50,7 @@ public class DbUtil {
         return tableNameCH;
     }
 
-    /*
+    /**
      * 获得所有列信息
      * @param tableName
      * @return
