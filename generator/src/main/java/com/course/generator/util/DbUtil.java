@@ -66,7 +66,8 @@ public class DbUtil {
                 String columnName = rs.getString("Field");
                 String type = rs.getString("Type");
                 String comment = rs.getString("Comment");
-                String nullAble = rs.getString("Null"); //YES NO
+                //YES NO
+                String nullAble = rs.getString("Null");
                 Field field = new Field();
                 field.setName(columnName);
                 field.setNameHump(lineToHump(columnName));
