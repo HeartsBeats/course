@@ -74,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, path, name, suffix, size, use, created_at, updated_at, shard_index, shard_size, 
-    shard_total, key
+    id, `path`, `name`, suffix, `size`, `use`, created_at, updated_at, shard_index, shard_size,
+    shard_total, `key`
   </sql>
   <select id="selectByExample" parameterType="com.course.server.domain.FileExample" resultMap="BaseResultMap">
     select
@@ -92,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from file
     where id = #{id,jdbcType=CHAR}
@@ -108,14 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.course.server.domain.File">
-    insert into file (id, path, name, 
-      suffix, size, use, created_at, 
-      updated_at, shard_index, shard_size, 
-      shard_total, key)
-    values (#{id,jdbcType=CHAR}, #{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{use,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{updatedAt,jdbcType=TIMESTAMP}, #{shardIndex,jdbcType=INTEGER}, #{shardSize,jdbcType=INTEGER}, 
-      #{shardTotal,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR})
+    insert into file (id, `path`, `name`,
+                        suffix, `size`, `use`, created_at,
+                        updated_at, shard_index, shard_size,
+                        shard_total, `key`)
+    values (#{id,jdbcType=CHAR}, #{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+            #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{use,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP},
+            #{updatedAt,jdbcType=TIMESTAMP}, #{shardIndex,jdbcType=INTEGER}, #{shardSize,jdbcType=INTEGER},
+            #{shardTotal,jdbcType=INTEGER}, #{key,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.course.server.domain.File">
     insert into file
@@ -124,19 +124,19 @@
         id,
       </if>
       <if test="path != null">
-        path,
+        `path`,
       </if>
       <if test="name != null">
-        name,
+        `name`,
       </if>
       <if test="suffix != null">
         suffix,
       </if>
       <if test="size != null">
-        size,
+        `size`,
       </if>
       <if test="use != null">
-        use,
+        `use`,
       </if>
       <if test="createdAt != null">
         created_at,
@@ -154,7 +154,7 @@
         shard_total,
       </if>
       <if test="key != null">
-        key,
+        `key`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -209,19 +209,19 @@
         id = #{record.id,jdbcType=CHAR},
       </if>
       <if test="record.path != null">
-        path = #{record.path,jdbcType=VARCHAR},
+        `path` = #{record.path,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.suffix != null">
         suffix = #{record.suffix,jdbcType=VARCHAR},
       </if>
       <if test="record.size != null">
-        size = #{record.size,jdbcType=INTEGER},
+        `size` = #{record.size,jdbcType=INTEGER},
       </if>
       <if test="record.use != null">
-        use = #{record.use,jdbcType=CHAR},
+        `use` = #{record.use,jdbcType=CHAR},
       </if>
       <if test="record.createdAt != null">
         created_at = #{record.createdAt,jdbcType=TIMESTAMP},
@@ -239,7 +239,7 @@
         shard_total = #{record.shardTotal,jdbcType=INTEGER},
       </if>
       <if test="record.key != null">
-        key = #{record.key,jdbcType=VARCHAR},
+        `key` = #{record.key,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -249,17 +249,17 @@
   <update id="updateByExample" parameterType="map">
     update file
     set id = #{record.id,jdbcType=CHAR},
-      path = #{record.path,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      suffix = #{record.suffix,jdbcType=VARCHAR},
-      size = #{record.size,jdbcType=INTEGER},
-      use = #{record.use,jdbcType=CHAR},
-      created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
-      shard_index = #{record.shardIndex,jdbcType=INTEGER},
-      shard_size = #{record.shardSize,jdbcType=INTEGER},
-      shard_total = #{record.shardTotal,jdbcType=INTEGER},
-      key = #{record.key,jdbcType=VARCHAR}
+    `path` = #{record.path,jdbcType=VARCHAR},
+    `name` = #{record.name,jdbcType=VARCHAR},
+    suffix = #{record.suffix,jdbcType=VARCHAR},
+    `size` = #{record.size,jdbcType=INTEGER},
+    `use` = #{record.use,jdbcType=CHAR},
+    created_at = #{record.createdAt,jdbcType=TIMESTAMP},
+    updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+    shard_index = #{record.shardIndex,jdbcType=INTEGER},
+    shard_size = #{record.shardSize,jdbcType=INTEGER},
+    shard_total = #{record.shardTotal,jdbcType=INTEGER},
+    `key` = #{record.key,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -268,19 +268,19 @@
     update file
     <set>
       <if test="path != null">
-        path = #{path,jdbcType=VARCHAR},
+        `path` = #{path,jdbcType=VARCHAR},
       </if>
       <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="suffix != null">
         suffix = #{suffix,jdbcType=VARCHAR},
       </if>
       <if test="size != null">
-        size = #{size,jdbcType=INTEGER},
+        `size` = #{size,jdbcType=INTEGER},
       </if>
       <if test="use != null">
-        use = #{use,jdbcType=CHAR},
+        `use` = #{use,jdbcType=CHAR},
       </if>
       <if test="createdAt != null">
         created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -298,24 +298,24 @@
         shard_total = #{shardTotal,jdbcType=INTEGER},
       </if>
       <if test="key != null">
-        key = #{key,jdbcType=VARCHAR},
+        `key` = #{key,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.course.server.domain.File">
     update file
-    set path = #{path,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      suffix = #{suffix,jdbcType=VARCHAR},
-      size = #{size,jdbcType=INTEGER},
-      use = #{use,jdbcType=CHAR},
-      created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-      shard_index = #{shardIndex,jdbcType=INTEGER},
-      shard_size = #{shardSize,jdbcType=INTEGER},
-      shard_total = #{shardTotal,jdbcType=INTEGER},
-      key = #{key,jdbcType=VARCHAR}
+    set `path` = #{path,jdbcType=VARCHAR},
+        `name` = #{name,jdbcType=VARCHAR},
+        suffix = #{suffix,jdbcType=VARCHAR},
+        `size` = #{size,jdbcType=INTEGER},
+        `use` = #{use,jdbcType=CHAR},
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+        shard_index = #{shardIndex,jdbcType=INTEGER},
+        shard_size = #{shardSize,jdbcType=INTEGER},
+        shard_total = #{shardTotal,jdbcType=INTEGER},
+        `key` = #{key,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

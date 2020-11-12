@@ -94,7 +94,10 @@ public class LogAspect {
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
-        LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter)); // 为空的会不打印，但是像图片等长字段也会打印
+        /*
+         * 为空的会不打印，但是像图片等长字段也会打印
+         */
+        LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter));
     }
 
     @Around("controllerPointcut()")
