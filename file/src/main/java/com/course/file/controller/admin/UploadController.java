@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -41,11 +43,11 @@ public class UploadController {
 
     @Value("${file.domain}")
     private String FILE_DOMAIN;
-    
+
     @Resource
     private FileService fileService;
 
-    public ResponseDto upload(@RequestBody FileDto fileDto) throws IOException {
+    public ResponseDto upload(@RequestBody FileDto fileDto) throws Exception {
         LOG.info("上传文件开始");
         String use = fileDto.getUse();
         String key = fileDto.getKey();
@@ -69,10 +71,12 @@ public class UploadController {
                 .append(key)
                 .append(".")
                 .append(suffix)
+                .toString();
+        String localPath = new StringBuffer(path)
                 .append(".")
                 .append(fileDto.getShardIndex())
                 .toString();
-        String fullPath = FILE_PATH + path;
+        String fullPath = FILE_PATH + localPath;
         File dest = new File(fullPath);
         shard.transferTo(dest);
         LOG.info(dest.getAbsolutePath());
@@ -83,9 +87,62 @@ public class UploadController {
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
-        fileDto.setPath(FILE_DOMAIN+path);
+        fileDto.setPath(FILE_DOMAIN + path);
         responseDto.setContent(fileDto);
+        /*
+         *对于非字符串变量来说，"=="和"equals"方法的作用是相同的都是用来比较其，对象在堆内存的首地址，
+         * 即用来比较两个引用变量是否指向同一个对象。
+         */
+        if (fileDto.getShardIndex().equals(fileDto.getShardTotal())) {
+            this.merge(fileDto);
+        }
         return responseDto;
+    }
+
+    public void merge(FileDto fileDto) throws Exception {
+        LOG.info("合并分片开始");
+        // http://127.0.0.1:9000/file/f/course\6sfSqfOwzmik4A4icMYuUe.mp4
+        String path = fileDto.getPath();
+        //course\6sfSqfOwzmik4A4icMYuUe.mp4
+        path = path.replace(FILE_DOMAIN, "");
+        Integer shardTotal = fileDto.getShardTotal();
+        File newFile = new File(FILE_PATH + path);
+        /*
+         *  文件追加写入
+         */
+        FileOutputStream outputStream = new FileOutputStream(newFile, true);
+        // 分片文件
+        FileInputStream fileInputStream = null;
+        byte[] byt = new byte[10 * 1024 * 1024];
+        int len;
+        try {
+            for (int i = 0; i < shardTotal; i++) {
+                // 读取第i个分片   course\6sfSqfOwzmik4A4icMYuUe.mp4.1
+                fileInputStream = new FileInputStream(new File(FILE_PATH + path + "." + (i + 1)));
+                while ((len = fileInputStream.read(byt)) != -1) {
+                    outputStream.write(byt, 0, len);
+                    // 每次分片合并结束就关闭IO文件读取之后存储在内存中 如果高并发的情况下会很占jvm的堆区 】
+                    try {
+                        if (fileInputStream != null) {
+                            fileInputStream.close();
+                        }
+                        LOG.info("分片读取IO流关闭");
+                    } catch (Exception e) {
+                        LOG.error("分片读取IO流关闭", e);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            LOG.error("分片合并异常", e);
+        }finally {
+            try {
+                outputStream.close();
+                LOG.info("IO输出流关闭");
+            }catch (Exception e) {
+                LOG.error("IO输出流关闭", e);
+            }
+        }
+        LOG.info("合并分片结束");
     }
 }
 
