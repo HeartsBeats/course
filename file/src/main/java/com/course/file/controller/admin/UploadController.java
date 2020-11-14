@@ -134,15 +134,27 @@ public class UploadController {
             }
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
-        }finally {
+        } finally {
             try {
                 outputStream.close();
                 LOG.info("IO输出流关闭");
-            }catch (Exception e) {
+            } catch (Exception e) {
                 LOG.error("IO输出流关闭", e);
             }
         }
         LOG.info("合并分片结束");
+        // 通知垃圾回收器可以回收，但不能保证立即回收
+        System.gc();
+        // 删除分片
+        LOG.info("删除分片开始");
+        for (int i = 0; i < shardTotal; i++) {
+            String filePath = FILE_PATH + path + "." + (i + 1);
+            File file = new File(filePath);
+            boolean result = file.delete();
+            LOG.info("删除{}，{}", filePath, result ? "成功" : "失败");
+        }
+        LOG.info("删除分片结束");
     }
+
 }
 
