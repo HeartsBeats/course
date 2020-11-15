@@ -76,7 +76,7 @@ export default {
       formData.append('file', file);
       formData.append('use', use);
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-simple', formData).then((response)=>{
         Loading.hide();
         let resp = response.data;
         console.log("上传文件成功：", resp);
