@@ -86,12 +86,11 @@ export default {
       // console.log("base64:", base64);
 
       let param = {
-        'shard': base64,
         'shardIndex': shardIndex,
         'shardSize': shardSize,
         'shardTotal': shardTotal,
         'use': use,
-        'name': fileName,
+        'name': file.name,
         'suffix': suffix,
         'size': size,
         'key': key62
@@ -103,7 +102,7 @@ export default {
      */
     check: function (param) {
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/check', param.key).then((response) => {
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/'+ param.key).then((response) => {
         let resp = response.data;
         if (resp.success) {
           let obj = resp.content;
@@ -111,6 +110,11 @@ export default {
             param.shardIndex = 1;
             console.log("没有找到文件记录，从分片1开始上传");
             _this.upload(param);
+          } else if (obj.shardIndex === obj.shardTotal) {
+            // 已上传分片 = 分片总数，说明已全部上传完，不需要再上传
+            Toast.success("文件极速秒传成功！");
+            _this.afterUpload(resp);
+            $("#" + _this.inputId + "-input").val("");
           } else {
             param.shardIndex = obj.shardIndex + 1;
             console.log("找到文件记录，从分片" + param.shardIndex + "开始上传");
@@ -134,6 +138,7 @@ export default {
       let fileShard = _this.getFileShard(shardIndex, shardSize);
       // 将分片转为base64传输
       let fileReader = new FileReader();
+      Progress.show(parseInt((shardIndex - 1) * 100 / shardTotal));
       fileReader.onload = function (e) {
         // 读取转换的base64
         let base64 = e.target.result;
@@ -144,11 +149,13 @@ export default {
           Loading.hide();
           let resp = response.data;
           console.log("上传文件成功：", resp);
+          Progress.show(parseInt(shardIndex  * 100 / shardTotal));
           if (shardIndex < shardTotal) {
             // 上传下一个分片
             param.shardIndex = param.shardIndex + 1;
             _this.upload(param);
           } else {
+            Progress.hide();
             _this.afterUpload(resp);
             $("#" + _this.inputId + "-input").val("");
           }

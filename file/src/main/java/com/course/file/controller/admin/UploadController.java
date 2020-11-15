@@ -119,25 +119,19 @@ public class UploadController {
                 fileInputStream = new FileInputStream(new File(FILE_PATH + path + "." + (i + 1)));
                 while ((len = fileInputStream.read(byt)) != -1) {
                     outputStream.write(byt, 0, len);
-                    // 每次分片合并结束就关闭IO文件读取之后存储在内存中 如果高并发的情况下会很占jvm的堆区 】
-                    try {
-                        if (fileInputStream != null) {
-                            fileInputStream.close();
-                        }
-                        LOG.info("分片读取IO流关闭");
-                    } catch (Exception e) {
-                        LOG.error("分片读取IO流关闭", e);
-                    }
                 }
             }
         } catch (IOException e) {
             LOG.error("分片合并异常", e);
         } finally {
             try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
                 outputStream.close();
-                LOG.info("IO输出流关闭");
+                LOG.info("IO流关闭");
             } catch (Exception e) {
-                LOG.error("IO输出流关闭", e);
+                LOG.error("IO流关闭", e);
             }
         }
         LOG.info("合并分片结束");
@@ -155,7 +149,7 @@ public class UploadController {
         LOG.info("删除分片结束");
     }
 
-    @PostMapping("/check/{key}")
+    @GetMapping("/check/{key}")
     public ResponseDto cheack(@PathVariable String key) {
         LOG.info("检查上传分片开始：{}", key);
         ResponseDto responseDto = new ResponseDto();

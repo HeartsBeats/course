@@ -109,9 +109,9 @@
   </delete>
   <insert id="insert" parameterType="com.course.server.domain.File">
     insert into file (id, `path`, `name`,
-                        suffix, `size`, `use`, created_at,
-                        updated_at, shard_index, shard_size,
-                        shard_total, `key`)
+                      suffix, `size`, `use`, created_at,
+                      updated_at, shard_index, shard_size,
+                      shard_total, `key`)
     values (#{id,jdbcType=CHAR}, #{path,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
             #{suffix,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, #{use,jdbcType=CHAR}, #{createdAt,jdbcType=TIMESTAMP},
             #{updatedAt,jdbcType=TIMESTAMP}, #{shardIndex,jdbcType=INTEGER}, #{shardSize,jdbcType=INTEGER},
