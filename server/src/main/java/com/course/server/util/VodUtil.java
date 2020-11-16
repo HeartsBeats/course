@@ -99,10 +99,11 @@ public class VodUtil {
     }
 
     public static void main(String[] argv) {
+
         //您的AccessKeyId
-        String accessKeyId = "LTAI4FnmXZVs9Pufn8kt2whV";
+        String accessKeyId = " LTAI4G1ZKeW89fTwszWb1Cam";
         //您的AccessKeySecret
-        String accessKeySecret = "yQqZJ0WGnyAxaT9Gy1mKIJXY68F6A6";
+        String accessKeySecret = "cD5kjzpg4FlXgPbCVYaWlosqJJQnHN";
         //需要上传到VOD的本地视频文件的完整路径，需要包含文件扩展名
         String localFile = "D:\\imooc\\course\\workspace\\course\\admin\\public\\static\\image\\小节视频\\test.mp4";
         try {

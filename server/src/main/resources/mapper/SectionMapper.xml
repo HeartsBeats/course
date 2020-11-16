@@ -12,6 +12,7 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="vod" jdbcType="CHAR" property="vod" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at
+    id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at, 
+    vod
   </sql>
   <select id="selectByExample" parameterType="com.course.server.domain.SectionExample" resultMap="BaseResultMap">
     select
@@ -108,11 +110,11 @@
     insert into section (id, title, course_id, 
       chapter_id, video, time, 
       charge, sort, created_at, 
-      updated_at)
+      updated_at, vod)
     values (#{id,jdbcType=CHAR}, #{title,jdbcType=VARCHAR}, #{courseId,jdbcType=CHAR}, 
       #{chapterId,jdbcType=CHAR}, #{video,jdbcType=VARCHAR}, #{time,jdbcType=INTEGER}, 
       #{charge,jdbcType=CHAR}, #{sort,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, 
-      #{updatedAt,jdbcType=TIMESTAMP})
+      #{updatedAt,jdbcType=TIMESTAMP}, #{vod,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.course.server.domain.Section">
     insert into section
@@ -147,6 +149,9 @@
       <if test="updatedAt != null">
         updated_at,
       </if>
+      <if test="vod != null">
+        vod,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -178,6 +183,9 @@
       </if>
       <if test="updatedAt != null">
         #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vod != null">
+        #{vod,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -220,6 +228,9 @@
       <if test="record.updatedAt != null">
         updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.vod != null">
+        vod = #{record.vod,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -236,7 +247,8 @@
       charge = #{record.charge,jdbcType=CHAR},
       sort = #{record.sort,jdbcType=INTEGER},
       created_at = #{record.createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP}
+      updated_at = #{record.updatedAt,jdbcType=TIMESTAMP},
+      vod = #{record.vod,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -271,6 +283,9 @@
       <if test="updatedAt != null">
         updated_at = #{updatedAt,jdbcType=TIMESTAMP},
       </if>
+      <if test="vod != null">
+        vod = #{vod,jdbcType=CHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
@@ -284,7 +299,8 @@
       charge = #{charge,jdbcType=CHAR},
       sort = #{sort,jdbcType=INTEGER},
       created_at = #{createdAt,jdbcType=TIMESTAMP},
-      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      vod = #{vod,jdbcType=CHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>
