@@ -69,6 +69,16 @@ public class FileDto {
      */
     private String shard;
 
+    private String vod;
+
+    public String getVod() {
+        return vod;
+    }
+
+    public void setVod(String vod) {
+        this.vod = vod;
+    }
+
     public String getShard() {
         return shard;
     }
@@ -189,6 +199,7 @@ public class FileDto {
         sb.append(", shardTotal=").append(shardTotal);
         sb.append(", key='").append(key).append('\'');
         sb.append(", shard='").append(shard).append('\'');
+        sb.append(", vod='").append(vod).append('\'');
         sb.append('}');
         return sb.toString();
     }
