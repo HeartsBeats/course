@@ -21,6 +21,12 @@ export default {
     suffixs: {
       default: []
     },
+    shardSize: {
+      default: 50 * 1024
+    },
+    url: {
+      default: "oss-append"
+    },
     use: {
       default: ""
     },
@@ -79,7 +85,7 @@ export default {
       // 文件分片
       let size = file.size;
       let use = _this.use;
-      let shardSize = 50 * 1024;    //以50kB为一个分片
+      let shardSize = _this.shardSize;    //以50kB为一个分片
       let shardIndex = 1;		//分片索引
       let shardTotal = Math.ceil(size / shardSize); //总片数
 
@@ -145,7 +151,7 @@ export default {
         let base64 = e.target.result;
         param.shard = base64;
 
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append', param).then((response) => {
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/'+_this.uri, param).then((response) => {
 
           let resp = response.data;
           console.log("上传文件成功：", resp);
