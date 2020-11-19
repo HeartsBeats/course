@@ -118,6 +118,7 @@ public class VodController {
 //        if (fileDto.getShardIndex().equals(fileDto.getShardTotal())) {
 //            this.merge(fileDto);
 //        }
+        LOG.info("返回结果: "+responseDto);
         return responseDto;
     }
 }
