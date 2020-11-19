@@ -90,6 +90,18 @@ public class VodUtil {
     }
 
     /**
+     * 获取播放凭证函数
+     * @param client
+     * @return
+     * @throws Exception
+     */
+    public static GetVideoPlayAuthResponse getVideoPlayAuth(DefaultAcsClient client, String videoId) throws Exception {
+        GetVideoPlayAuthRequest request = new GetVideoPlayAuthRequest();
+        request.setVideoId(videoId);
+        return client.getAcsResponse(request);
+    }
+
+    /**
      * 上传本地文件
      * @param ossClient
      * @param uploadAddress

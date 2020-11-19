@@ -2,9 +2,10 @@
   <div>
     <h4 class="lighter">
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/course" class="pink"> {{course.name}} </router-link>：
+      <router-link to="/business/course" class="pink"> {{ course.name }}</router-link>
+      ：
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/chapter" class="pink"> {{chapter.name}} </router-link>
+      <router-link to="/business/chapter" class="pink"> {{ chapter.name }}</router-link>
     </h4>
     <hr>
     <p>
@@ -26,9 +27,7 @@
       <tr>
         <th>ID</th>
         <th>标题</th>
-        <th>课程</th>
-        <th>章</th>
-        <th>视频</th>
+        <th>VOD</th>
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
@@ -38,16 +37,17 @@
 
       <tbody>
       <tr v-for="section in sections">
-        <td>{{section.id}}</td>
-        <td>{{section.title}}</td>
-        <td>{{section.courseId}}</td>
-        <td>{{section.chapterId}}</td>
-        <td>{{section.video}}</td>
-        <td>{{section.time | formatSecond}}</td>
-        <td>{{CHARGE | optionKV(section.charge)}}</td>
-        <td>{{section.sort}}</td>
+        <td>{{ section.id }}</td>
+        <td>{{ section.title }}</td>
+        <td>{{ section.vod }}</td>
+        <td>{{ section.time | formatSecond }}</td>
+        <td>{{ SECTION_CHARGE | optionKV(section.charge) }}</td>
+        <td>{{ section.sort }}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
+            <button v-on:click="play(section)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-video-camera bigger-120"></i>
+            </button>
             <button v-on:click="edit(section)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
@@ -64,7 +64,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
           </div>
           <div class="modal-body">
@@ -78,13 +79,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">课程</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{course.name}}</p>
+                  <p class="form-control-static">{{ course.name }}</p>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">章</label>
+                <label class="col-sm-2 control-label">大章</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{chapter.name}}</p>
+                  <p class="form-control-static">{{ chapter.name }}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -97,7 +98,7 @@
                        v-bind:after-upload="afterUpload"></vod>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
-                      <player ref="player"></player>
+                      <player v-bind:player-id="'form-player-div'" ref="player"></player>
                       <video v-bind:src="section.video" id="video" controls="controls" class="hidden"></video>
                     </div>
                   </div>
@@ -125,7 +126,7 @@
                 <label class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
                   <select v-model="section.charge" class="form-control">
-                    <option v-for="o in CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                    <option v-for="o in SECTION_CHARGE" v-bind:value="o.key">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -144,26 +145,29 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <modal-player ref="modalPlayer"></modal-player>
   </div>
 </template>
 
 <script>
 import Pagination from "../../components/pagination";
 import BigFile from "../../components/big-file";
-import Vod from "../../components/Vod";
+import Vod from "../../components/vod";
 import Player from "../../components/player";
+import ModalPlayer from "../../components/model_player";
 
 export default {
-  components: {Pagination, BigFile,Vod,Player},
-  name: "section",
+  components: {ModalPlayer, Player, Pagination, BigFile, Vod},
+  name: "business-section",
   data: function () {
     return {
       section: {},
       sections: [],
-      CHARGE: [{key: "C", value: "收费"}, {key: "F", value: "免费"}],
+      SECTION_CHARGE: SECTION_CHARGE,
+      FILE_USE: FILE_USE,
       course: {},
       chapter: {},
-      FILE_USE: FILE_USE,
     }
   },
   mounted: function () {
@@ -178,11 +182,10 @@ export default {
     _this.chapter = chapter;
     _this.list(1);
     // sidebar激活样式方法一
-    this.$parent.activeSidebar("business-section-sidebar");
+    this.$parent.activeSidebar("business-course-sidebar");
 
   },
   methods: {
-
     /**
      * 点击【新增】
      */
@@ -226,6 +229,7 @@ export default {
      */
     save(page) {
       let _this = this;
+
       _this.section.video = "";
       // 保存校验
       if (1 != 1
@@ -237,6 +241,7 @@ export default {
       }
       _this.section.courseId = _this.course.id;
       _this.section.chapterId = _this.chapter.id;
+
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
         Loading.hide();
@@ -268,31 +273,40 @@ export default {
         })
       });
     },
+
     afterUpload(resp) {
       let _this = this;
       let video = resp.content.path;
       let vod = resp.content.vod;
-
       _this.section.video = video;
       _this.section.vod = vod;
       _this.getTime();
       _this.$refs.player.playUrl(video);
     },
+
     /**
      * 获取时长
      */
     getTime() {
       let _this = this;
-      setTimeout(function (){
-      let ele = document.getElementById("video");
-      console.log(ele);
-      _this.section.time = parseInt(ele.duration, 10);
-      console.log(_this.section.time);
-     }, 1000);
+      setTimeout(function () {
+        let ele = document.getElementById("video");
+        _this.section.time = parseInt(ele.duration, 10);
+      }, 1000);
     },
+
+    /**
+     * 播放视频
+     * @param section
+     */
+    play(section) {
+      let _this = this;
+      _this.$refs.modalPlayer.playVod(section.vod);
+    }
   }
 }
 </script>
+
 <style scoped>
 video {
   width: 100%;
