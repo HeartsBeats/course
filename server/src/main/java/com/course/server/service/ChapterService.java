@@ -38,7 +38,7 @@ public class ChapterService {
         chapterPageDto.setList(chapterDtoList);
     }
 
-    /*
+    /**
      *  保存数据
      * @Author: YJQ
      * @Date: 2020-10-27 09:12
@@ -59,7 +59,7 @@ public class ChapterService {
         chapterMapper.updateByPrimaryKey(chapter);
     }
 
-    /*
+    /**
      *  大章数据插入
      */
     public void insert(Chapter chapter) {

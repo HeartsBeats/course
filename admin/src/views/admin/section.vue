@@ -153,7 +153,7 @@
 <script>
 import Pagination from "../../components/pagination";
 import BigFile from "../../components/big-file";
-import Vod from "../../components/vod";
+import Vod from "../../components/Vod";
 import Player from "../../components/player";
 import ModalPlayer from "../../components/model_player";
 
