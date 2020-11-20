@@ -20,9 +20,14 @@ export default new Router({
         path: '*',
         redirect: "/login",
     }, {
-        path: '/login',
-        component: Login
-    },{
+        path: "",
+        redirect: "/login"
+    },
+        {
+            path: '/login',
+            component: Login
+
+        }, {
         path: '/',
         name: 'admin',
         component: Admin,
