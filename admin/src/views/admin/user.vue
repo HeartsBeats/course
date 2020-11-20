@@ -27,12 +27,15 @@
 
       <tbody>
       <tr v-for="user in users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.loginName }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.password }}</td>
+        <td>{{user.id}}</td>
+        <td>{{user.loginName}}</td>
+        <td>{{user.name}}</td>
+        <td>{{user.password}}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
+            <button v-on:click="editPassword(user)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-key bigger-120"></i>
+            </button>
             <button v-on:click="edit(user)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
@@ -49,8 +52,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
           </div>
           <div class="modal-body">
@@ -67,10 +69,10 @@
                   <input v-model="user.name" class="form-control">
                 </div>
               </div>
-              <div class="form-group">
+              <div v-show="!user.id" class="form-group">
                 <label class="col-sm-2 control-label">密码</label>
                 <div class="col-sm-10">
-                  <input v-model="user.password" class="form-control">
+                  <input v-model="user.password" type="password" class="form-control">
                 </div>
               </div>
             </form>
@@ -82,22 +84,52 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <div id="edit-password-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">修改密码</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2">密码</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="password" v-model="user.password" name="password">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              取消
+            </button>
+            <button type="button" class="btn btn-white btn-info btn-round" v-on:click="savePassword()">
+              <i class="ace-icon fa fa-plus blue"></i>
+              保存密码
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
 </template>
 
 <script>
 import Pagination from "../../components/pagination";
-
 export default {
   components: {Pagination},
   name: "system-user",
-  data: function () {
+  data: function() {
     return {
       user: {},
       users: [],
     }
   },
-  mounted: function () {
+  mounted: function() {
     let _this = this;
     _this.$refs.pagination.size = 5;
     _this.list(1);
@@ -133,7 +165,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/list', {
         page: page,
         size: _this.$refs.pagination.size,
-      }).then((response) => {
+      }).then((response)=>{
         Loading.hide();
         let resp = response.data;
         _this.users = resp.content.list;
@@ -145,7 +177,7 @@ export default {
     /**
      * 点击【保存】
      */
-    save(page) {
+    save() {
       let _this = this;
 
       // 保存校验
@@ -160,7 +192,7 @@ export default {
       // 防止在传输过程中被截取，不至于信息泄露
       _this.user.password = hex_md5(_this.user.password + KEY);
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save', _this.user).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save', _this.user).then((response)=>{
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -178,9 +210,9 @@ export default {
      */
     del(id) {
       let _this = this;
-      Confirm.show("删除用户后不可恢复，确认删除？", function () {
+      Confirm.show("删除用户表后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/user/delete/' + id).then((response) => {
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/user/delete/' + id).then((response)=>{
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
@@ -189,7 +221,38 @@ export default {
           }
         })
       });
-    }
+    },
+
+    /**
+     * 点击【重置密码】
+     */
+    editPassword(user) {
+      let _this = this;
+      _this.user = $.extend({}, user);
+      _this.user.password = null;
+      $("#edit-password-modal").modal("show");
+    },
+
+    /**
+     * 点击【保存密码】
+     */
+    savePassword() {
+      let _this = this;
+
+      _this.user.password = hex_md5(_this.user.password + KEY);
+      Loading.show();
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save-password', _this.user).then((response)=>{
+        Loading.hide();
+        let resp = response.data;
+        if (resp.success) {
+          $("#edit-password-modal").modal("hide");
+          _this.list(1);
+          Toast.success("保存成功！");
+        } else {
+          Toast.warning(resp.message)
+        }
+      })
+    },
   }
 }
 </script>

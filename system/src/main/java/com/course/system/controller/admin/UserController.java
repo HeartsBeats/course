@@ -38,7 +38,7 @@ public class UserController {
     */
     @PostMapping("/save")
     public ResponseDto save(@RequestBody UserDto userDto) {
-        //对密码进行 md5 加密 两层加密
+        //对密码进行 md5 加密 两层加密 16进制
         userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
         // 保存校验
         ValidatorUtil.require(userDto.getLoginName(), "登陆名");
@@ -59,6 +59,17 @@ public class UserController {
         public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         userService.delete(id);
+        return responseDto;
+    }
+    /**
+     *  重置密码
+     */
+    @PostMapping("/save-password")
+    public ResponseDto savePassword(@RequestBody UserDto userDto) {
+        userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
+        ResponseDto responseDto = new ResponseDto();
+        userService.savePassword(userDto);
+        responseDto.setContent(userDto);
         return responseDto;
     }
 }

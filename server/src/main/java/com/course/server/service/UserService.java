@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -66,7 +67,12 @@ public class UserService {
      * 更新
      */
     private void update(User user) {
-        userMapper.updateByPrimaryKey(user);
+        /*
+         *  由于编辑用户信息无法更改用户密码，但是保存信息操作又对密码就行重新加密
+         *   故须需要清空，防止密码无故更改
+         */
+        user.setPassword(null);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -89,5 +95,15 @@ public class UserService {
             //  由于用户登录名的唯一性，故在数据库中只有唯一对应用户名的用户
             return users.get(0);
         }
+    }
+
+    /**
+     *  重置密码
+     */
+    public void savePassword(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setPassword(userDto.getPassword());
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
