@@ -38,11 +38,10 @@ public class UserController {
     @PostMapping("/save")
     public ResponseDto save(@RequestBody UserDto userDto) {
     // 保存校验
-                ValidatorUtil.require(userDto.getId(), "id");
-                ValidatorUtil.require(userDto.getLoginName(), "登陆名");
-                ValidatorUtil.length(userDto.getLoginName(), "登陆名", 1, 50);
-                ValidatorUtil.length(userDto.getName(), "昵称", 1, 50);
-                ValidatorUtil.require(userDto.getPassword(), "密码");
+        ValidatorUtil.require(userDto.getLoginName(), "登陆名");
+        ValidatorUtil.length(userDto.getLoginName(), "登陆名", 1, 50);
+        ValidatorUtil.length(userDto.getName(), "昵称", 1, 50);
+        ValidatorUtil.require(userDto.getPassword(), "密码");
 
         ResponseDto responseDto = new ResponseDto();
         userService.save(userDto);
