@@ -1,4 +1,5 @@
-var KEY = "COURSE";
+var KEY = "!@#QWERT";
+// 盐值为一个随机数值
 /*
  * Configurable variables. You may need to tweak these to be compatible with
  * the server-side, but the defaults work in most cases.
