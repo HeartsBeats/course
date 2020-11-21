@@ -1,17 +1,16 @@
 package com.course.system.controller.admin;
 
-import com.course.server.dto.LoginUserDto;
-import com.course.server.dto.UserDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.ResponseDto;
+import com.course.server.dto.*;
 import com.course.server.service.UserService;
 import com.course.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/admin/user")
@@ -73,6 +72,7 @@ public class UserController {
         responseDto.setContent(userDto);
         return responseDto;
     }
+
     /**
      * 重置密码
      */
@@ -82,6 +82,15 @@ public class UserController {
         ResponseDto responseDto = new ResponseDto();
         LoginUserDto loginUserDto = userService.login(userDto);
         responseDto.setContent(loginUserDto);
+        return responseDto;
+    }
+    /**
+     * 重置密码
+     */
+    @GetMapping("/logout")
+    public ResponseDto logout(HttpServletRequest request) {
+        ResponseDto responseDto = new ResponseDto();
+        request.getSession().removeAttribute(Constants.LOGIN_USER);
         return responseDto;
     }
 }
