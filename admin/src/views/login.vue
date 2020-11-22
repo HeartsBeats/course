@@ -43,7 +43,7 @@
                         <label class="block clearfix">
                           <span class="block input-icon input-icon-right">
                             <div class="input-group">
-                              <input type="text" class="form-control" placeholder="验证码">
+                                   <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
                               <span class="input-group-addon" id="basic-addon2">
                                 <img v-on:click="loadImageCode()" id="image-code" alt="验证码"/>
                               </span>
@@ -87,7 +87,8 @@ export default {
   data: function() {
     return {
       user: {},
-      remember: true // 默认勾选记住账号密码
+      remember: true ,// 默认勾选记住账号密码
+      imageCodeToken: ""
     }
   },
   mounted: function() {
@@ -106,6 +107,7 @@ export default {
     login () {
       let _this = this;
       // 如果密码是从缓存带出来的，则不需要重新加密,如果密码是从缓存中取出再加密就是两次加密
+      _this.user.imageCodeToken = _this.imageCodeToken;
       let md5 = hex_md5(_this.user.password);
       let rememberUser = LocalStorage.get(LOCAL_KEY_REMEMBER_USER) || {};
       if (md5 !== rememberUser.md5) {
@@ -140,8 +142,18 @@ export default {
           _this.$router.push("/welcome")
         } else {
           Toast.warning(resp.message)
+          _this.user.password = "";
+          _this.loadImageCode();
         }
       });
+    },
+    /**
+     * 加载图形验证码
+     */
+    loadImageCode: function () {
+      let _this = this;
+      _this.imageCodeToken = Tool.uuid(8);
+      $('#image-code').attr('src', process.env.VUE_APP_SERVER + '/system/admin/kaptcha/image-code/' + _this.imageCodeToken);
     },
   }
 }
