@@ -102,6 +102,9 @@ export default {
     if (rememberUser) {
       _this.user = rememberUser;
     }
+
+    // 初始时加载一次验证码图片
+    _this.loadImageCode();
   },
   methods: {
     login () {
