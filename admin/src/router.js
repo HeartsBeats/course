@@ -31,6 +31,10 @@ export default new Router({
         path: '/',
         name: 'admin',
         component: Admin,
+        meta:{
+            // 没有登录禁止访问后端控制台页面
+            loginRequire:true
+        },
         children:[{
             path:'welcome',
             name: 'welcome',
