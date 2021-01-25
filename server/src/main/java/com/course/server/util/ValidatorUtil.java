@@ -3,7 +3,7 @@ package com.course.server.util;
 import com.course.server.exception.ValidatorException;
 import org.springframework.util.StringUtils;
 
-/*
+/**
  * @ProjectName: course
  * @Package: com.course.server.util
  * @ClassName: ValidatorUtil

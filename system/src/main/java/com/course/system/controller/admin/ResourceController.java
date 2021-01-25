@@ -1,6 +1,5 @@
 package com.course.system.controller.admin;
 
-import com.course.server.dto.ResourceDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.ResourceService;
@@ -39,16 +38,12 @@ public class ResourceController {
      * 保存，id有值时更新，无值时新增
      */
     @PostMapping("/save")
-    public ResponseDto save(@RequestBody ResourceDto resourceDto) {
+    public ResponseDto save(@RequestBody String jsonStr) {
         // 保存校验
-        ValidatorUtil.require(resourceDto.getName(), "名称");
-        ValidatorUtil.length(resourceDto.getName(), "名称", 1, 100);
-        ValidatorUtil.length(resourceDto.getPage(), "页面", 1, 50);
-        ValidatorUtil.length(resourceDto.getRequest(), "请求", 1, 200);
+        ValidatorUtil.require(jsonStr, BUSINESS_NAME);
 
         ResponseDto responseDto = new ResponseDto();
-        resourceService.save(resourceDto);
-        responseDto.setContent(resourceDto);
+        resourceService.saveJson(jsonStr);
         return responseDto;
     }
 

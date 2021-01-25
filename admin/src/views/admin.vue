@@ -308,7 +308,7 @@
                 <li class="divider"></li>
 
                 <li>
-                  <a  v-on:click="logout"  href="#">
+                  <a v-on:click="logout" href="#">
                     <i class="ace-icon fa fa-power-off"></i>
                     Logout
                   </a>
@@ -384,9 +384,11 @@
               </li>
 
               <li class="">
-                <a href="jqgrid.html">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  权限管理
+                <a href="" id="system-resource-sidebar">
+                  <router-link to="/system/resource">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    资源管理
+                  </router-link>
                 </a>
 
                 <b class="arrow"></b>
@@ -572,7 +574,7 @@ export default {
     logout() {
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/' + _this.loginUser.token).then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/' + _this.loginUser.token).then((response) => {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
