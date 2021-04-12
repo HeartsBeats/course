@@ -85,18 +85,18 @@ public class ResourceService {
     @Transactional
     public void saveJson(String json) {
         List<ResourceDto> jsonList = JSON.parseArray(json, ResourceDto.class);
-        List<ResourceDto> list = new ArrayList<>();
+        List<ResourceDto> list = new ArrayList<ResourceDto>();
         if (!CollectionUtils.isEmpty(jsonList)) {
-            for (ResourceDto d: jsonList) {
+            for (ResourceDto d : jsonList) {
                 d.setParent("");
                 add(list, d);
             }
         }
         LOG.info("共{}条", list.size());
-
+        // 删除原本的资源记录
         resourceMapper.deleteByExample(null);
-        for (int i = 0; i < list.size(); i++) {
-            this.insert(CopyUtils.copy(list.get(i), Resource.class));
+        for (ResourceDto resourceDto : list) {
+            this.insert(CopyUtils.copy(resourceDto, Resource.class));
         }
     }
 
@@ -113,5 +113,40 @@ public class ResourceService {
                 add(list, d);
             }
         }
+    }
+    /**
+     * 按约定将列表转成树
+     * 要求：ID要正序排列
+     * @return
+     */
+    public List<ResourceDto> loadTree() {
+        ResourceExample example = new ResourceExample();
+        example.setOrderByClause("id asc");
+        List<Resource> resourceList = resourceMapper.selectByExample(example);
+        List<ResourceDto> resourceDtoList = CopyUtils.copyList(resourceList, ResourceDto.class);
+        for (int i = resourceDtoList.size() - 1; i >= 0; i--) {
+            // 当前要移动的记录
+            ResourceDto child = resourceDtoList.get(i);
+
+            // 如果当前节点没有父节点，则不用往下了
+            if (StringUtils.isEmpty(child.getParent())) {
+                continue;
+            }
+            // 查找父节点
+            for (int j = i - 1; j >= 0; j--) {
+                ResourceDto parent = resourceDtoList.get(j);
+                if (child.getParent().equals(parent.getId())) {
+                    if (CollectionUtils.isEmpty(parent.getChildren())) {
+                        parent.setChildren(new ArrayList<>());
+                    }
+                    // 添加到最前面，否则会变成倒序，因为循环是从后往前循环的
+                    parent.getChildren().add(0, child);
+
+                    // 子节点找到父节点后，删除列表中的子节点
+                    resourceDtoList.remove(child);
+                }
+            }
+        }
+        return resourceDtoList;
     }
 }
