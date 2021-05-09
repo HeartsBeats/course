@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,52 +30,52 @@ public class RoleService {
 
 
     /**
-        * 列表查询
-        */
-        public void list(PageDto pageDto) {
-            PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-            RoleExample roleExample = new RoleExample();
-            List<Role> roleList = roleMapper.selectByExample(roleExample);
-            PageInfo<Role> pageInfo = new PageInfo<>(roleList);
-            pageDto.setTotal(pageInfo.getTotal());
-            List
-            <RoleDto> roleDtoList = CopyUtils.copyList(roleList, RoleDto.class);
-                pageDto.setList(roleDtoList);
-        }
+     * 列表查询
+     */
+    public void list(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        RoleExample roleExample = new RoleExample();
+        List<Role> roleList = roleMapper.selectByExample(roleExample);
+        PageInfo<Role> pageInfo = new PageInfo<>(roleList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List
+                <RoleDto> roleDtoList = CopyUtils.copyList(roleList, RoleDto.class);
+        pageDto.setList(roleDtoList);
+    }
 
-        /**
-        * 保存，id有值时更新，无值时新增
-        */
-        public void save(RoleDto roleDto) {
-            Role role = CopyUtils.copy(roleDto, Role.class);
-            if (StringUtils.isEmpty(roleDto.getId())) {
+    /**
+     * 保存，id有值时更新，无值时新增
+     */
+    public void save(RoleDto roleDto) {
+        Role role = CopyUtils.copy(roleDto, Role.class);
+        if (StringUtils.isEmpty(roleDto.getId())) {
             this.insert(role);
-            } else {
+        } else {
             this.update(role);
-            }
         }
+    }
 
-        /**
-        * 新增
-        */
-        private void insert(Role role) {
-            role.setId(UuidUtil.getShortUuid());
-            roleMapper.insert(role);
-        }
+    /**
+     * 新增
+     */
+    private void insert(Role role) {
+        role.setId(UuidUtil.getShortUuid());
+        roleMapper.insert(role);
+    }
 
-        /**
-        * 更新
-        */
-        private void update(Role role) {
-            roleMapper.updateByPrimaryKey(role);
-        }
+    /**
+     * 更新
+     */
+    private void update(Role role) {
+        roleMapper.updateByPrimaryKey(role);
+    }
 
-        /**
-        * 删除
-        */
-        public void delete(String id) {
-            roleMapper.deleteByPrimaryKey(id);
-        }
+    /**
+     * 删除
+     */
+    public void delete(String id) {
+        roleMapper.deleteByPrimaryKey(id);
+    }
 
 
     /**
@@ -96,5 +97,21 @@ public class RoleService {
             roleResource.setResourceId(resourceIds.get(i));
             roleResourceMapper.insert(roleResource);
         }
+    }
+
+    /**
+     * 按角色加载资源
+     *
+     * @param roleId
+     */
+    public List<String> listResource(String roleId) {
+        RoleResourceExample example = new RoleResourceExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<RoleResource> roleResourceList = roleResourceMapper.selectByExample(example);
+        List<String> resourceIdList = new ArrayList<>();
+        for (int i = 0, l = roleResourceList.size(); i < l; i++) {
+            resourceIdList.add(roleResourceList.get(i).getResourceId());
+        }
+        return resourceIdList;
     }
 }
