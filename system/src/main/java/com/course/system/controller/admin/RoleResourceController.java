@@ -22,8 +22,8 @@ public class RoleResourceController {
     private RoleResourceService roleResourceService;
 
     /**
-    * 列表查询
-    */
+     * 列表查询
+     */
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
@@ -33,15 +33,14 @@ public class RoleResourceController {
     }
 
     /**
-    * 保存，id有值时更新，无值时新增
-    */
+     * 保存，id有值时更新，无值时新增
+     */
     @PostMapping("/save")
     public ResponseDto save(@RequestBody RoleResourceDto roleResourceDto) {
-    // 保存校验
-                ValidatorUtil.require(roleResourceDto.getId(), "id");
-                ValidatorUtil.require(roleResourceDto.getRoleId(), "角色");
-                ValidatorUtil.require(roleResourceDto.getResourceId(), "资源");
-
+        // 保存校验
+        ValidatorUtil.require(roleResourceDto.getId(), "id");
+        ValidatorUtil.require(roleResourceDto.getRoleId(), "角色");
+        ValidatorUtil.require(roleResourceDto.getResourceId(), "资源");
         ResponseDto responseDto = new ResponseDto();
         roleResourceService.save(roleResourceDto);
         responseDto.setContent(roleResourceDto);
@@ -49,12 +48,14 @@ public class RoleResourceController {
     }
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     @DeleteMapping("/delete/{id}")
-        public ResponseDto delete(@PathVariable String id) {
+    public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         roleResourceService.delete(id);
         return responseDto;
     }
+
+
 }
