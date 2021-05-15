@@ -103,6 +103,60 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <!-- 角色用户关联配置 -->
+    <div id="user-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">角色用户关联配置</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <table id="user-table" class="table table-hover">
+                  <tbody>
+                  <tr v-for="user in users">
+                    <td>{{ user.loginName }}</td>
+                    <td class="text-right">
+                      <a v-on:click="addUser(user)" href="javascript:;" class="">
+                        <i class="ace-icon fa fa-arrow-circle-right blue"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <table id="role-user-table" class="table table-hover">
+                  <tbody>
+                  <tr v-for="user in roleUsers">
+                    <td>{{ user.loginName }}</td>
+                    <td class="text-right">
+                      <a v-on:click="deleteUser(user)" href="javascript:;" class="">
+                        <i class="ace-icon fa fa-trash blue"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white btn-default btn-round" data-dismiss="modal">
+              <i class="ace-icon fa fa-times"></i>
+              关闭
+            </button>
+            <button type="button" class="btn btn-white btn-info btn-round" v-on:click="saveUser()">
+              <i class="ace-icon fa fa-plus blue"></i>
+              保存
+            </button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
   </div>
 </template>
 
@@ -303,6 +357,85 @@ export default {
           _this.zTree.checkNode(node, true);
         }
       });
+    },
+    /**
+     * 点击【用户】
+     */
+    editUser(role) {
+      let _this = this;
+      _this.role = $.extend({}, role);
+      _this.listUser();
+      $("#user-modal").modal("show");
+    },
+
+    /**
+     * 查询所有用户
+     */
+    listUser() {
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/list', {
+        page: 1,
+        size: 9999
+      }).then((response) => {
+        let resp = response.data;
+        if (resp.success) {
+          _this.users = resp.content.list;
+          console.log(_this.users)
+        } else {
+          Toast.warning(resp.message);
+        }
+      })
+    },
+
+    /**
+     * 角色中增加用户
+     */
+    addUser(user) {
+      let _this = this;
+
+      // 如果当前要添加的用户在右边列表中已经有了，则不用再添加
+      let users = _this.roleUsers;
+      for (let i = 0; i < users.length; i++) {
+        if (user === users[i]) {
+          return;
+        }
+      }
+
+      _this.roleUsers.push(user);
+    },
+
+    /**
+     * 角色中删除用户
+     */
+    deleteUser(user) {
+      let _this = this;
+      Tool.removeObj(_this.roleUsers, user);
+    },
+
+    /**
+     * 角色用户模态框点击【保存】
+     */
+    saveUser() {
+      let _this = this;
+      let users = _this.roleUsers;
+
+      // 保存时，只需要保存用户id，所以使用id数组进行参数传递
+      let userIds = [];
+      for (let i = 0; i < users.length; i++) {
+        userIds.push(users[i].id);
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/save-user', {
+        id: _this.role.id,
+        userIds: userIds
+      }).then((response) => {
+        console.log("保存角色用户结果：", response);
+        let resp = response.data;
+        if (resp.success) {
+          Toast.success("保存成功!");
+        } else {
+          Toast.warning(resp.message);
+        }
+      })
     },
   }
 }
