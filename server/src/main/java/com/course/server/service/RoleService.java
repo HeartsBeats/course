@@ -28,6 +28,7 @@ public class RoleService {
 
     @Resource
     private RoleUserMapper roleUserMapper;
+
     /**
      * 列表查询
      */
@@ -133,5 +134,21 @@ public class RoleService {
             roleUser.setUserId(userIdList.get(i));
             roleUserMapper.insert(roleUser);
         }
+    }
+
+    /**
+     * 按角色加载用户
+     *
+     * @param roleId
+     */
+    public List<String> listUser(String roleId) {
+        RoleUserExample example = new RoleUserExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<RoleUser> roleUserList = roleUserMapper.selectByExample(example);
+        List<String> userIdList = new ArrayList<>();
+        for (int i = 0, l = roleUserList.size(); i < l; i++) {
+            userIdList.add(roleUserList.get(i).getUserId());
+        }
+        return userIdList;
     }
 }
