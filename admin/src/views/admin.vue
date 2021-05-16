@@ -294,23 +294,23 @@
                 <li>
                   <a href="#">
                     <i class="ace-icon fa fa-cog"></i>
-                    Settings
+                    系统设置
                   </a>
                 </li>
 
                 <li>
                   <a href="profile.html">
                     <i class="ace-icon fa fa-user"></i>
-                    Profile
+                    个人信息
                   </a>
                 </li>
 
                 <li class="divider"></li>
 
                 <li>
-                  <a v-on:click="logout" href="#">
+                  <a v-on:click="logout()" href="#">
                     <i class="ace-icon fa fa-power-off"></i>
-                    Logout
+                    退出登录
                   </a>
                 </li>
               </ul>
@@ -363,7 +363,7 @@
             <b class="arrow"></b>
           </li>
 
-          <li class="">
+          <li v-show="hasResource('01')" class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 系统管理 </span>
@@ -374,7 +374,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="" id="system-user-sidebar">
+              <li v-show="hasResource('0101')" class="" id="system-user-sidebar">
                 <router-link to="/system/user">
                   <i class="menu-icon fa fa-caret-right"></i>
                   用户管理
@@ -383,13 +383,20 @@
                 <b class="arrow"></b>
               </li>
 
-              <li class="">
-                <a href="" id="system-resource-sidebar">
-                  <router-link to="/system/resource">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    资源管理
-                  </router-link>
-                </a>
+              <li v-show="hasResource('0102')" class="" id="system-resource-sidebar">
+                <router-link to="/system/resource">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  资源管理
+                </router-link>
+
+                <b class="arrow"></b>
+              </li>
+
+              <li v-show="hasResource('0103')" class="" id="system-role-sidebar">
+                <router-link to="/system/role">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  角色管理
+                </router-link>
 
                 <b class="arrow"></b>
               </li>
@@ -485,7 +492,7 @@
           <div class="footer-content">
 						<span class="bigger-120">
 							<span class="blue bolder">Heart</span>
-							在线视频课程 &copy; 2020-2099
+							在线视频课程 &copy; 2021-2099
 						</span>
 
             &nbsp; &nbsp;
@@ -546,6 +553,14 @@ export default {
     }
   },
   methods: {
+    /**
+     * 查找是否有权限
+     * @param id
+     */
+    hasResource(id) {
+      return Tool.hasResource(id);
+    },
+
     login() {
       this.$router.push("/admin")
     },
@@ -568,9 +583,7 @@ export default {
         parentLi.addClass("open active");
       }
     },
-    /**
-     *  退出登录
-     */
+
     logout() {
       let _this = this;
       Loading.show();

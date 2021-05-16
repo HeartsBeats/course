@@ -108,11 +108,27 @@ Tool = {
     let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     let uuid = [];
     radix = radix || chars.length;
-
     for (let i = 0; i < len; i++) {
       uuid[i] = chars[0 | Math.random() * radix];
     }
-
     return uuid.join('');
+  },
+  /**
+   * 查找是否有权限
+   * @param id 资源id
+   */
+  hasResource: function (id) {
+    let _this = this;
+    let resources = _this.getLoginUser().resources;
+    if (_this.isEmpty(resources)) {
+      return false;
+    }
+    for (let i = 0; i < resources.length; i++) {
+      if (id === resources[i].id) {
+        return true;
+      }
+    }
+    return false;
   }
+
 };

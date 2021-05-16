@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <button v-on:click="add()" class="btn btn-white btn-default btn-round">
+      <button v-show="hasResource('010101')" v-on:click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
         新增
       </button>
@@ -27,19 +27,19 @@
 
       <tbody>
       <tr v-for="user in users">
-        <td>{{user.id}}</td>
-        <td>{{user.loginName}}</td>
-        <td>{{user.name}}</td>
-        <td>{{user.password}}</td>
+        <td>{{ user.id }}</td>
+        <td>{{ user.loginName }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.password }}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
-            <button v-on:click="editPassword(user)" class="btn btn-xs btn-info">
+            <button v-show="hasResource('010103')" v-on:click="editPassword(user)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-key bigger-120"></i>
             </button>
-            <button v-on:click="edit(user)" class="btn btn-xs btn-info">
+            <button v-show="hasResource('010101')" v-on:click="edit(user)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
             </button>
-            <button v-on:click="del(user.id)" class="btn btn-xs btn-danger">
+            <button v-show="hasResource('010102')" v-on:click="del(user.id)" class="btn btn-xs btn-danger">
               <i class="ace-icon fa fa-trash-o bigger-120"></i>
             </button>
           </div>
@@ -52,7 +52,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
           </div>
           <div class="modal-body">
@@ -89,7 +90,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">修改密码</h4>
           </div>
           <div class="modal-body">
@@ -120,16 +122,17 @@
 
 <script>
 import Pagination from "../../components/pagination";
+
 export default {
   components: {Pagination},
   name: "system-user",
-  data: function() {
+  data: function () {
     return {
       user: {},
       users: [],
     }
   },
-  mounted: function() {
+  mounted: function () {
     let _this = this;
     _this.$refs.pagination.size = 5;
     _this.list(1);
@@ -138,6 +141,14 @@ export default {
 
   },
   methods: {
+    /**
+     * 查找是否有权限
+     * @param id
+     */
+    hasResource(id) {
+      return Tool.hasResource(id);
+    },
+
     /**
      * 点击【新增】
      */
@@ -165,7 +176,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/list', {
         page: page,
         size: _this.$refs.pagination.size,
-      }).then((response)=>{
+      }).then((response) => {
         Loading.hide();
         let resp = response.data;
         _this.users = resp.content.list;
@@ -189,10 +200,10 @@ export default {
       ) {
         return;
       }
-      // 防止在传输过程中被截取，不至于信息泄露
+
       _this.user.password = hex_md5(_this.user.password + KEY);
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save', _this.user).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save', _this.user).then((response) => {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -212,7 +223,7 @@ export default {
       let _this = this;
       Confirm.show("删除用户表后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/user/delete/' + id).then((response)=>{
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/user/delete/' + id).then((response) => {
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
@@ -241,7 +252,7 @@ export default {
 
       _this.user.password = hex_md5(_this.user.password + KEY);
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save-password', _this.user).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/save-password', _this.user).then((response) => {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
