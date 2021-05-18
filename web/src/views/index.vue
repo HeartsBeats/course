@@ -17,24 +17,8 @@
       <div className="container">
         <div className="title1">最新上线</div>
         <div className="row">
-          <div v-for="o in news" className="col-md-4">
-            <div className="card mb-4 shadow-sm course">
-              <img className="img-fluid" v-bind:src="o.image">
-              <div className="card-body">
-                <h4 className="">{{ o.name }}</h4>
-                <p className="card-text">{{ o.summary }}</p>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="btn-group">
-                    <button type="button" className="btn btn-sm btn-outline-secondary">课程详情</button>
-                  </div>
-                  <div className="text-muted">
-                    <span className="badge badge-info"><i className="fa fa-yen"
-                                                          aria-hidden="true"></i>&nbsp;{{ o.price }}</span>&nbsp;
-                    <span className="badge badge-info"><i className="fa fa-user" aria-hidden="true"></i>&nbsp;123</span>&nbsp;
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div v-for="o in news" class="col-md-4">
+            <the-course v-bind:course="o"></the-course>
           </div>
         </div>
 
@@ -42,24 +26,8 @@
 
         <div className="title2">好课推荐</div>
         <div className="row">
-          <div v-for="o in news" className="col-md-4">
-            <div className="card mb-4 shadow-sm course">
-              <img className="img-fluid" v-bind:src="o.image">
-              <div className="card-body">
-                <h4 className="">{{ o.name }}</h4>
-                <p className="card-text">{{ o.summary }}</p>
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="btn-group">
-                    <button type="button" className="btn btn-sm btn-outline-secondary">课程详情</button>
-                  </div>
-                  <div className="text-muted">
-                    <span className="badge badge-info"><i className="fa fa-yen"
-                                                          aria-hidden="true"></i>&nbsp;{{ o.price }}</span>&nbsp;
-                    <span className="badge badge-info"><i className="fa fa-user" aria-hidden="true"></i>&nbsp;123</span>&nbsp;
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div v-for="o in news" class="col-md-4">
+            <the-course v-bind:course="o"></the-course>
           </div>
         </div>
       </div>
@@ -69,9 +37,10 @@
 </template>
 
 <script>
-
+import TheCourse from "../components/the-course";
 export default {
   name: 'index',
+  components: {TheCourse},
   data: function () {
     return {
       news: [],
@@ -116,6 +85,15 @@ export default {
   -webkit-text-stroke: 1px black;
   letter-spacing: 0.04em;
   font-size: 2rem;
+}
+
+.course h4 {
+  font-size: 1.25rem;
+  margin: 15px 0;
+}
+
+.course .text-muted .badge {
+  font-size: 1rem;
 }
 
 .course h4 {
