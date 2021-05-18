@@ -7,6 +7,7 @@ import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.SortDto;
+import com.course.server.enums.CourseStatusEnum;
 import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.my.MyCourseMapper;
@@ -33,7 +34,7 @@ public class CourseService {
     private CourseMapper courseMapper;
 
     @Resource
-    private MyCourseMapper  myCourseMapper;
+    private MyCourseMapper myCourseMapper;
 
     @Resource
     private CourseCategoryService courseCategoryService;
@@ -41,61 +42,73 @@ public class CourseService {
     @Resource
     private CourseContentMapper courseContentMapper;
 
-        /**
-        * 列表查询
-        */
-        public void list(PageDto pageDto) {
-            PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-            CourseExample courseExample = new CourseExample();
-                    courseExample.setOrderByClause("sort asc");
-            List<Course> courseList = courseMapper.selectByExample(courseExample);
-            PageInfo<Course> pageInfo = new PageInfo<>(courseList);
-            pageDto.setTotal(pageInfo.getTotal());
-            List
-            <CourseDto> courseDtoList = CopyUtils.copyList(courseList, CourseDto.class);
-                pageDto.setList(courseDtoList);
-        }
+    /**
+     * 列表查询
+     */
+    public void list(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        CourseExample courseExample = new CourseExample();
+        courseExample.setOrderByClause("sort asc");
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+        PageInfo<Course> pageInfo = new PageInfo<>(courseList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List
+                <CourseDto> courseDtoList = CopyUtils.copyList(courseList, CourseDto.class);
+        pageDto.setList(courseDtoList);
+    }
 
-        /**
-        * 保存，id有值时更新，无值时新增
-        */
-        @Transactional
-        public void save(CourseDto courseDto) {
-            Course course = CopyUtils.copy(courseDto, Course.class);
-            if (StringUtils.isEmpty(courseDto.getId())) {
+    /**
+     * 保存，id有值时更新，无值时新增
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void save(CourseDto courseDto) {
+        Course course = CopyUtils.copy(courseDto, Course.class);
+        if (StringUtils.isEmpty(courseDto.getId())) {
             this.insert(course);
-            } else {
+        } else {
             this.update(course);
-            }
+        }
 //            由于如果是插入操作CourseDto中则不存在id值
-            courseCategoryService.saveBatch(course.getId(),courseDto.getCategorys());
-        }
+        courseCategoryService.saveBatch(course.getId(), courseDto.getCategorys());
+    }
 
-        /**
-        * 新增
-        */
-        private void insert(Course course) {
-            Date now = new Date();
-                    course.setCreatedAt(now);
-                    course.setUpdatedAt(now);
-            course.setId(UuidUtil.getShortUuid());
-            courseMapper.insert(course);
-        }
+    /**
+     * 新课列表查询，只查询已发布的，按创建日期倒序
+     */
+    public List<CourseDto> listNew(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        CourseExample courseExample = new CourseExample();
+        courseExample.createCriteria().andStatusEqualTo(CourseStatusEnum.PUBLISH.getCode());
+        courseExample.setOrderByClause("created_at desc");
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+        return CopyUtils.copyList(courseList, CourseDto.class);
+    }
 
-        /**
-        * 更新
-        */
-        private void update(Course course) {
-                    course.setUpdatedAt(new Date());
-            courseMapper.updateByPrimaryKey(course);
-        }
+    /**
+     * 新增
+     */
+    private void insert(Course course) {
+        Date now = new Date();
+        course.setCreatedAt(now);
+        course.setUpdatedAt(now);
+        course.setId(UuidUtil.getShortUuid());
+        courseMapper.insert(course);
+    }
 
-        /**
-        * 删除
-        */
-        public void delete(String id) {
-            courseMapper.deleteByPrimaryKey(id);
-        }
+    /**
+     * 更新
+     */
+    private void update(Course course) {
+        course.setUpdatedAt(new Date());
+        courseMapper.updateByPrimaryKey(course);
+    }
+
+    /**
+     * 删除
+     */
+    public void delete(String id) {
+        courseMapper.deleteByPrimaryKey(id);
+    }
 
     /*
      * 更新课程时长
