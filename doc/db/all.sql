@@ -331,7 +331,7 @@ insert into `role_resource` values ('00000005', '00000000', '0102');
 insert into `role_resource` values ('00000006', '00000000', '010201');
 insert into `role_resource` values ('00000007', '00000000', '0103');
 insert into `role_resource` values ('00000008', '00000000', '010301');
-<<<<<<< HEAD
+
 
 drop table if exists `role_user`;
 create table `role_user` (
@@ -342,8 +342,8 @@ create table `role_user` (
 ) engine=innodb default charset=utf8mb4 comment='角色用户关联';
 
 insert into `role_user` values ('00000000', '00000000', '10000000');
-=======
->>>>>>> 4ff8a9d615da9412c9f02ef444ac29e4f46ffb0e
+# 初始test/test
+insert into `user` (id, login_name, name, password) values ('10000000', 'test', '测试', 'e70e2222a9d67c4f2eae107533359aa4');
 -- -------------------------测试
 drop table if exists `test`;
 create table `test`
