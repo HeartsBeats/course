@@ -8,7 +8,7 @@
           知识付费时代刚刚起步，在这个领域有很多的发展机会。
         </p>
         <p>
-          <a href="#" className="btn btn-primary my-2 p-3 font-weight-bold">点击进入所有课程</a>
+          <router-link to="/list" class="btn btn-primary my-2 p-3 font-weight-bold">点击进入所有课程</router-link>
         </p>
       </div>
     </section>
