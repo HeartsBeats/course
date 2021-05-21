@@ -25,10 +25,10 @@ public class CourseController {
     private CourseCategoryService courseCategoryService;
 
     /**
-    * 列表查询
-    */
+     * 列表查询
+     */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody CoursePageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
         courseService.list(pageDto);
         responseDto.setContent(pageDto);
@@ -36,8 +36,8 @@ public class CourseController {
     }
 
     /**
-    * 保存，id有值时更新，无值时新增
-    */
+     * 保存，id有值时更新，无值时新增
+     */
     @PostMapping("/save")
     public ResponseDto save(@RequestBody CourseDto courseDto) {
         // 保存校验
@@ -48,15 +48,15 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         courseService.save(courseDto);
         responseDto.setContent(courseDto);
-        LOG.info("保存结果",responseDto);
+        LOG.info("保存结果", responseDto);
         return responseDto;
     }
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     @DeleteMapping("/delete/{id}")
-        public ResponseDto delete(@PathVariable String id) {
+    public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         courseService.delete(id);
         return responseDto;
@@ -64,6 +64,7 @@ public class CourseController {
 
     /**
      * 查找课程下所有分类
+     *
      * @param courseId
      */
     @PostMapping("/list-category/{courseId}")
@@ -76,17 +77,20 @@ public class CourseController {
 
     /**
      * 查找课程内容
+     *
      * @param courseId
      */
-    @GetMapping ("/find-content/{courseId}")
+    @GetMapping("/find-content/{courseId}")
     public ResponseDto findContent(@PathVariable String courseId) {
         ResponseDto responseDto = new ResponseDto();
         CourseContentDto contentDto = courseService.findContent(courseId);
         responseDto.setContent(contentDto);
         return responseDto;
     }
+
     /**
-     *  保存课程内容
+     * 保存课程内容
+     *
      * @param
      */
     @PostMapping("/save-content")
@@ -95,8 +99,10 @@ public class CourseController {
         courseService.saveContent(courseContentDto);
         return responseDto;
     }
+
     /**
      * 更新排序请求
+     *
      * @Author: YJQ
      * @Date: 2020-11-5 18:39
      */
