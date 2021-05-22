@@ -18,7 +18,9 @@
         <div class="row">
           <div class="col-12">
             <a v-on:click="onClickLevel2('11111111')" id="category-11111111" href="javascript:;" class="on">不限</a>
-            <a v-for="o in level2" v-on:click="onClickLevel2(o.id)" v-bind:id="'category-' + o.id" href="javascript:;">{{ o.name }}</a>
+            <a v-for="o in level2" v-on:click="onClickLevel2(o.id)" v-bind:id="'category-' + o.id" href="javascript:;">{{
+                o.name
+              }}</a>
 
             <div style="clear:both"></div>
           </div>
@@ -152,6 +154,8 @@ export default {
      */
     onClickLevel2(level2Id) {
       let _this = this;
+      $("#category-" + level2Id).siblings("a").removeClass("on");
+      $("#category-" + level2Id).addClass("on");
     },
 
   }
