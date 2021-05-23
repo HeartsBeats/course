@@ -1,26 +1,58 @@
 <template>
   <main role="main">
-    <div className="album py-5 bg-light">
-      <div className="container">
-        <div className="row course-head">
-          <div className="col-sm-6" id="cover-video-div">
-            <img className="img-fluid" v-bind:src="course.image">
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row course-head">
+          <div class="col-sm-6" id="cover-video-div">
+            <img class="img-fluid" v-bind:src="course.image">
           </div>
-          <div className="col-sm-6">
-            <h1>{{ co urse.name }}</h1>
-            <p className="course-head-item">
-              <span><i className="fa fa-clock-o"></i> {{ (course.time) | formatSecond }}</span>
-              <span>{{ CO URSE_LEVEL | optionKV(course.level) }}</span>
-              <span><i className="fa fa-user"></i> {{ cou rse.enroll }}</span>
+          <div class="col-sm-6">
+            <h1>{{ course.name }}</h1>
+            <p class="course-head-item">
+              <span><i class="fa fa-clock-o"></i> {{ (course.time) | formatSecond }}</span>
+              <span>{{ COURSE_LEVEL | optionKV(course.level) }}</span>
+              <span><i class="fa fa-user"></i> {{ course.enroll }}</span>
             </p>
-            <p className="course-head-desc">{{ co urse.summary }}</p>
-            <p className="course-head-price">
-              <span className="price-now text-danger"><i className="fa fa-yen"></i>&nbsp;{{ course.price }}&nbsp;&nbsp;</span>
+            <p class="course-head-desc">{{ course.summary }}</p>
+            <p class="course-head-price">
+              <span class="price-now text-danger"><i class="fa fa-yen"></i>&nbsp;{{ course.price }}&nbsp;&nbsp;</span>
             </p>
-            <p className="course-head-button-links">
-              <a className="btn btn-lg btn-primary btn-shadow" href="javascript:;">立即报名</a>
+            <p class="course-head-button-links">
+              <a class="btn btn-lg btn-primary btn-shadow" href="javascript:;">立即报名</a>
             </p>
           </div>
+        </div>
+
+        <div class="row">
+
+          <!-- 课程内容 & 大章小节 -->
+          <div class="col-md-9">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#info" data-toggle="tab">课程介绍</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#chapter" data-toggle="tab">章节目录</a>
+              </li>
+            </ul>
+
+            <br>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="info" v-html="course.content">
+              </div>
+              <div class="tab-pane" id="chapter">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 讲师信息 -->
+          <div class="col-md-3">
+          </div>
+
         </div>
       </div>
     </div>
