@@ -1,6 +1,6 @@
 package com.course.server.dto;
 
-/*
+/**
  * @ProjectName: course
  * @Package: com.course.server.dto
  * @ClassName: ChapterPageDto
