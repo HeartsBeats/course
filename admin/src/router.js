@@ -12,6 +12,7 @@ import File from './views/admin/file.vue'
 import Content from './views/admin/content.vue'
 import User from './views/admin/user.vue'
 import Resource from './views/admin/resource.vue'
+import Member from './views/admin/member.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -60,6 +61,10 @@ export default new Router({
             path: 'business/teacher',
             name: 'business/teacher',
             component: Teacher
+        },{
+            path: "business/member",
+            name: "business/member",
+            component: Member,
         },{
             path: 'file/file',
             name: 'file/file',
