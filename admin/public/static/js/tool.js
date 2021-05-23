@@ -84,6 +84,7 @@ Tool = {
     } while (number);
     return arr.join('');
   },
+
   /**
    * 保存登录用户信息
    */
@@ -108,11 +109,14 @@ Tool = {
     let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
     let uuid = [];
     radix = radix || chars.length;
+
     for (let i = 0; i < len; i++) {
       uuid[i] = chars[0 | Math.random() * radix];
     }
+
     return uuid.join('');
   },
+
   /**
    * 查找是否有权限
    * @param id 资源id
@@ -129,6 +133,26 @@ Tool = {
       }
     }
     return false;
-  }
+  },
 
+  /**
+   * 对象数组按key对应的值排序
+   * @param array
+   * @param key
+   * @returns {*}
+   */
+  sortAsc: function (array, key) {
+    return array.sort(function (obj1, obj2) {
+      let val1 = obj1[key];
+      let val2 = obj2[key];
+      console.log(val1, val2);
+      if (val1 < val2) {
+        return -1;
+      } else if (val1 > val2) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  }
 };
