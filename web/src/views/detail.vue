@@ -160,7 +160,11 @@ export default {
      */
     play(section) {
       let _this = this;
-      _this.$refs.modalPlayer.playVod(section.vod);
+      if (section.charge === _this.SECTION_CHARGE.CHARGE.key) {
+        Toast.warning("请先登录");
+      } else {
+        _this.$refs.modalPlayer.playVod(section.vod);
+      }
     }
   }
 }
