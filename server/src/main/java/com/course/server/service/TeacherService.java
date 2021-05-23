@@ -30,51 +30,62 @@ public class TeacherService {
         List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
         return CopyUtils.copyList(teacherList, TeacherDto.class);
     }
-        /**
-        * 列表查询
-        */
-        public void list(PageDto pageDto) {
-            PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-            TeacherExample teacherExample = new TeacherExample();
-            List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
-            PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
-            pageDto.setTotal(pageInfo.getTotal());
-            List
-            <TeacherDto> teacherDtoList = CopyUtils.copyList(teacherList, TeacherDto.class);
-                pageDto.setList(teacherDtoList);
-        }
 
-        /**
-        * 保存，id有值时更新，无值时新增
-        */
-        public void save(TeacherDto teacherDto) {
-            Teacher teacher = CopyUtils.copy(teacherDto, Teacher.class);
-            if (StringUtils.isEmpty(teacherDto.getId())) {
+    /**
+     * 列表查询
+     */
+    public void list(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        TeacherExample teacherExample = new TeacherExample();
+        List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
+        PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
+        pageDto.setTotal(pageInfo.getTotal());
+        List
+                <TeacherDto> teacherDtoList = CopyUtils.copyList(teacherList, TeacherDto.class);
+        pageDto.setList(teacherDtoList);
+    }
+
+    /**
+     * 保存，id有值时更新，无值时新增
+     */
+    public void save(TeacherDto teacherDto) {
+        Teacher teacher = CopyUtils.copy(teacherDto, Teacher.class);
+        if (StringUtils.isEmpty(teacherDto.getId())) {
             this.insert(teacher);
-            } else {
+        } else {
             this.update(teacher);
-            }
         }
+    }
 
-        /**
-        * 新增
-        */
-        private void insert(Teacher teacher) {
-            teacher.setId(UuidUtil.getShortUuid());
-            teacherMapper.insert(teacher);
-        }
+    /**
+     * 新增
+     */
+    private void insert(Teacher teacher) {
+        teacher.setId(UuidUtil.getShortUuid());
+        teacherMapper.insert(teacher);
+    }
 
-        /**
-        * 更新
-        */
-        private void update(Teacher teacher) {
-            teacherMapper.updateByPrimaryKey(teacher);
-        }
+    /**
+     * 更新
+     */
+    private void update(Teacher teacher) {
+        teacherMapper.updateByPrimaryKey(teacher);
+    }
 
-        /**
-        * 删除
-        */
-        public void delete(String id) {
-            teacherMapper.deleteByPrimaryKey(id);
-        }
+    /**
+     * 删除
+     */
+    public void delete(String id) {
+        teacherMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查找
+     *
+     * @param id
+     */
+    public TeacherDto findById(String id) {
+        Teacher teacher = teacherMapper.selectByPrimaryKey(id);
+        return CopyUtils.copy(teacher, TeacherDto.class);
+    }
 }

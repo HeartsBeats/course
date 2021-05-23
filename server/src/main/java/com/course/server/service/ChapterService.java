@@ -28,7 +28,7 @@ public class ChapterService {
         PageHelper.startPage(chapterPageDto.getPage(), chapterPageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
         ChapterExample.Criteria criteria = chapterExample.createCriteria();
-        if(!StringUtils.isEmpty(chapterPageDto.getCourseId())){
+        if (!StringUtils.isEmpty(chapterPageDto.getCourseId())) {
             criteria.andCourseIdEqualTo(chapterPageDto.getCourseId());
         }
         List<Chapter> chapters = chapterMapper.selectByExample(chapterExample);
@@ -39,7 +39,8 @@ public class ChapterService {
     }
 
     /**
-     *  保存数据
+     * 保存数据
+     *
      * @Author: YJQ
      * @Date: 2020-10-27 09:12
      */
@@ -60,7 +61,7 @@ public class ChapterService {
     }
 
     /**
-     *  大章数据插入
+     * 大章数据插入
      */
     public void insert(Chapter chapter) {
         chapter.setId(UuidUtil.getShortUuid());
@@ -72,6 +73,17 @@ public class ChapterService {
      */
     public void delete(String id) {
         chapterMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 查询某一课程下的所有章
+     */
+    public List<ChapterDto> listByCourse(String courseId) {
+        ChapterExample example = new ChapterExample();
+        example.createCriteria().andCourseIdEqualTo(courseId);
+        List<Chapter> chapterList = chapterMapper.selectByExample(example);
+        List<ChapterDto> chapterDtoList = CopyUtils.copyList(chapterList, ChapterDto.class);
+        return chapterDtoList;
     }
 
 }

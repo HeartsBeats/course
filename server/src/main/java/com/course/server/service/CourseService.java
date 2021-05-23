@@ -39,8 +39,18 @@ public class CourseService {
     @Resource
     private CourseContentMapper courseContentMapper;
 
+    @Resource
+    private TeacherService teacherService;
+
+    @Resource
+    private ChapterService chapterService;
+
+    @Resource
+    private SectionService sectionService;
+
     /**
      * 列表查询：关联课程分类表
+     *
      * @param pageDto
      */
     public void list(CoursePageDto pageDto) {
@@ -104,8 +114,9 @@ public class CourseService {
         courseMapper.deleteByPrimaryKey(id);
     }
 
-    /*
+    /**
      * 更新课程时长
+     *
      * @param courseId
      * @return
      */
@@ -114,8 +125,9 @@ public class CourseService {
         myCourseMapper.updateTime(courseId);
     }
 
-    /*
-     *  查找课程内容
+    /**
+     * 查找课程内容
+     *
      * @param courseId
      * @return
      */
@@ -127,8 +139,9 @@ public class CourseService {
         return CopyUtils.copy(courseContent, CourseContentDto.class);
     }
 
-    /*
-     *  保存课程内容
+    /**
+     * 保存课程内容
+     *
      * @param courseId
      * @return
      */
@@ -147,19 +160,51 @@ public class CourseService {
      *
      * @param sortDto
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void sort(SortDto sortDto) {
         // 修改当前记录的排序值
         myCourseMapper.updateSort(sortDto);
-
         // 如果排序值变大
         if (sortDto.getNewSort() > sortDto.getOldSort()) {
             myCourseMapper.moveSortsForward(sortDto);
         }
-
         // 如果排序值变小
         if (sortDto.getNewSort() < sortDto.getOldSort()) {
             myCourseMapper.moveSortsBackward(sortDto);
         }
+    }
+
+    /**
+     * 查找某一课程，供web模块用，只能查已发布的
+     *
+     * @param id
+     * @return
+     */
+    public CourseDto findCourse(String id) {
+        Course course = courseMapper.selectByPrimaryKey(id);
+        if (course == null || !CourseStatusEnum.PUBLISH.getCode().equals(course.getStatus())) {
+            return null;
+        }
+        CourseDto courseDto = CopyUtils.copy(course, CourseDto.class);
+
+        // 查询内容
+        CourseContent content = courseContentMapper.selectByPrimaryKey(id);
+        if (content != null) {
+            courseDto.setContent(content.getContent());
+        }
+
+        // 查找讲师信息
+        TeacherDto teacherDto = teacherService.findById(courseDto.getTeacherId());
+        courseDto.setTeacher(teacherDto);
+
+        // 查找章信息
+        List<ChapterDto> chapterDtoList = chapterService.listByCourse(id);
+        courseDto.setChapters(chapterDtoList);
+
+        // 查找节信息
+        List<SectionDto> sectionDtoList = sectionService.listByCourse(id);
+        courseDto.setSections(sectionDtoList);
+
+        return courseDto;
     }
 }
