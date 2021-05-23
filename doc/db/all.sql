@@ -348,7 +348,7 @@ insert into `user` (id, login_name, name, password) values ('10000000', 'test', 
 drop table if exists `member`;
 create table `member` (
                           `id` char(8) not null default '' comment 'id',
-                          `mobile` varchar(11) comment '手机号',
+                          `mobile` varchar(11) not null comment '手机号',
                           `password` char(32) not null comment '密码',
                           `name` varchar(50) comment '昵称',
                           `photo` varchar(200) comment '头像url',
