@@ -13,6 +13,7 @@ import Content from './views/admin/content.vue'
 import User from './views/admin/user.vue'
 import Resource from './views/admin/resource.vue'
 import Member from './views/admin/member.vue'
+import Sms from './views/admin/sms'
 
 Vue.use(Router);
 
