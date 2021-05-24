@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Date;
@@ -119,5 +120,16 @@ public class MemberService {
                 throw new BusinessException(BusinessExceptionCode.LOGIN_MEMBER_ERROR);
             }
         }
+    }
+
+    /**
+     * 按手机号查找
+     *
+     * @param mobile
+     * @return
+     */
+    public MemberDto findByMobile(String mobile) {
+        Member member = this.selectByMobile(mobile);
+        return CopyUtils.copy(member, MemberDto.class);
     }
 }
