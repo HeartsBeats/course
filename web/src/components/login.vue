@@ -42,8 +42,11 @@
           <div className="register-div" v-show="MODAL_STATUS === STATUS_REGISTER">
             <h3>注&nbsp;&nbsp;册</h3>
             <div className="form-group">
-              <input id="register-mobile" v-model="memberRegister.mobile"
+              <input v-on:blur="onRegisterMobileBlur()"
+                     v-bind:class="registerMobileValidateClass"
+                     id="register-mobile" v-model="memberRegister.mobile"
                      className="form-control" placeholder="手机号">
+              <span v-show="registerMobileValidate === false" className="text-danger">手机号11位数字，且不能重复</span>
             </div>
             <div className="form-group">
               <div className="input-group">
@@ -135,8 +138,19 @@ export default {
       memberRegister: {},
 
       remember: true, // 记住密码
-      imageCodeToken: ""
+      imageCodeToken: "",
+
+      // 注册框显示错误信息
+      registerMobileValidate: null,
     }
+  },
+  computed: {
+    registerMobileValidateClass: function () {
+      return {
+        'border-success': this.registerMobileValidate === true,
+        'border-danger': this.registerMobileValidate === false,
+      }
+    },
   },
   mounted() {
     let _this = this;
@@ -253,11 +267,14 @@ export default {
      */
     sendSmsForRegister() {
       let _this = this;
+      if (!_this.onRegisterMobileBlur()) {
+        return false;
+      }
       let sms = {
         mobile: _this.memberRegister.mobile,
         use: SMS_USE.REGISTER.key
       };
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/web/member/is-mobile-exist/' + _this.memberRegister.mobile).then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/web/member/is-mobile-exist/' + _this.memberRegister.mobile).then((res) => {
         let response = res.data;
         if (response.success) {
           Toast.warning("手机号已被注册");
@@ -308,6 +325,14 @@ export default {
       }, 1000);
     },
 
+
+    //-------------------------------- 注册框校验 ----------------------------
+
+    onRegisterMobileBlur() {
+      let _this = this;
+      _this.registerMobileValidate = Pattern.validateMobile(_this.memberRegister.mobile);
+      return _this.registerMobileValidate;
+    },
   }
 }
 </script>
