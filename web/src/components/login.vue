@@ -248,6 +248,36 @@ export default {
       $('#image-code').attr('src', process.env.VUE_APP_SERVER + '/business/web/kaptcha/image-code/' + _this.imageCodeToken);
     },
 
+    /**
+     * 发送注册短信
+     */
+    sendSmsForRegister() {
+      let _this = this;
+      let sms = {
+        mobile: _this.memberRegister.mobile,
+        use: SMS_USE.REGISTER.key
+      };
+
+      _this.sendSmsCode(sms);
+    },
+
+    /**
+     * 发送短信
+     */
+    sendSmsCode(sms) {
+      let _this = this;
+
+      // 调服务端发短信接口
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/sms/send', sms).then((res) => {
+        let response = res.data;
+        if (response.success) {
+          Toast.success("短信已发送")
+        } else {
+          Toast.warning(response.message);
+        }
+      })
+    },
+
   }
 }
 </script>
