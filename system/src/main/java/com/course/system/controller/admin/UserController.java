@@ -34,8 +34,8 @@ public class UserController {
     private RedisTemplate redisTemplate;
 
     /**
-    * 列表查询
-    */
+     * 列表查询
+     */
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
@@ -45,8 +45,8 @@ public class UserController {
     }
 
     /**
-    * 保存，id有值时更新，无值时新增
-    */
+     * 保存，id有值时更新，无值时新增
+     */
     @PostMapping("/save")
     public ResponseDto save(@RequestBody UserDto userDto) {
         //对密码进行 md5 加密 两层加密 16进制
@@ -64,16 +64,17 @@ public class UserController {
     }
 
     /**
-    * 删除
-    */
+     * 删除
+     */
     @DeleteMapping("/delete/{id}")
-        public ResponseDto delete(@PathVariable String id) {
+    public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         userService.delete(id);
         return responseDto;
     }
+
     /**
-     *  重置密码
+     * 重置密码
      */
     @PostMapping("/save-password")
     public ResponseDto savePassword(@RequestBody UserDto userDto) {
@@ -88,12 +89,12 @@ public class UserController {
      * 登录
      */
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody UserDto userDto,HttpServletRequest request) {
+    public ResponseDto login(@RequestBody UserDto userDto, HttpServletRequest request) {
         LOG.info("用户登录开始");
         userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
         ResponseDto responseDto = new ResponseDto();
         // 根据验证码token去获取缓存中的验证码，和用户输入的验证码是否一致
-        String imageCode = (String)redisTemplate.opsForValue().get(userDto.getImageCodeToken());
+        String imageCode = (String) redisTemplate.opsForValue().get(userDto.getImageCodeToken());
         LOG.info("从redis中获取验证码");
         if (StringUtils.isEmpty(imageCode)) {
             responseDto.setSuccess(false);
@@ -119,6 +120,7 @@ public class UserController {
         responseDto.setContent(loginUserDto);
         return responseDto;
     }
+
     /**
      * 重置密码
      */

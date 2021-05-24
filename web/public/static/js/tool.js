@@ -88,15 +88,15 @@ Tool = {
   /**
    * 保存登录用户信息
    */
-  setLoginUser: function (loginUser) {
-    SessionStorage.set(SESSION_KEY_LOGIN_USER, loginUser);
+  setLoginMember: function (loginMember) {
+    SessionStorage.set(SESSION_KEY_LOGIN_MEMBER, loginMember);
   },
 
   /**
    * 获取登录用户信息
    */
-  getLoginUser: function () {
-    return SessionStorage.get(SESSION_KEY_LOGIN_USER) || {};
+  getLoginMember: function () {
+    return SessionStorage.get(SESSION_KEY_LOGIN_MEMBER) || {};
   },
 
   /**
@@ -134,7 +134,6 @@ Tool = {
     }
     return false;
   },
-
 
 
   /**
