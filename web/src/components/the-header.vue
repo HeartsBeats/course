@@ -31,8 +31,11 @@
               </div>
             </li>
           </ul>
-          <span v-show="loginMember.id" class="text-white pr-3">您好：{{loginMember.name}}</span>
-          <button v-on:click="openLoginModal()" class="btn btn-outline-light my-2 my-sm-0" type="submit">登录/注册</button>
+          <span v-show="loginMember.id" class="text-white pr-3">您好：{{ loginMember.name }}</span>
+          <button v-show="loginMember.id" v-on:click="logout()" class="btn btn-outline-light my-2 my-sm-0">退出登录</button>
+          <button v-show="!loginMember.id" v-on:click="openLoginModal()" class="btn btn-outline-light my-2 my-sm-0">
+            登录/注册
+          </button>
         </div>
       </div>
     </nav>
@@ -43,6 +46,7 @@
 <script>
 
 import TheLogin from "./login"
+
 export default {
   name: 'theHeader',
   components: {TheLogin},
@@ -66,6 +70,20 @@ export default {
     setLoginMember(loginMember) {
       let _this = this;
       _this.loginMember = loginMember;
+    },
+    logout() {
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/web/member/logout/' + _this.loginMember.token).then((response) => {
+        let resp = response.data;
+        if (resp.success) {
+          Tool.setLoginMember(null);
+          _this.loginMember = {};
+          Toast.success("退出登录成功");
+          _this.$router.push("/");
+        } else {
+          Toast.warning(resp.message);
+        }
+      });
     },
   }
 }
