@@ -1,4 +1,4 @@
-package com.course.generator.server.enums;
+package com.course.generator.enums;
 
 import com.course.server.enums.*;
 
@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 public class EnumGenerator {
     static String path = "admin\\public\\static\\js\\enums.js";
+//    static String path = "web\\public\\static\\js\\enums.js";
 
     public static void main(String[] args) {
         StringBuffer bufferObject = new StringBuffer();
@@ -22,6 +23,8 @@ public class EnumGenerator {
             toJson(CourseChargeEnum.class, bufferObject, bufferArray);
             toJson(CourseStatusEnum.class, bufferObject, bufferArray);
             toJson(FileUseEnum.class, bufferObject, bufferArray);
+            toJson(SmsUseEnum.class, bufferObject, bufferArray);
+            toJson(SmsStatusEnum.class, bufferObject, bufferArray);
             StringBuffer buffer = bufferObject.append("\r\n").append(bufferArray);
             writeJs(buffer);
         } catch (Exception e) {
@@ -75,6 +78,7 @@ public class EnumGenerator {
 
     /**
      * 写文件
+     *
      * @param stringBuffer
      */
     public static void writeJs(StringBuffer stringBuffer) {
@@ -87,8 +91,7 @@ public class EnumGenerator {
             osw.close();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 out.close();
             } catch (Exception e) {
@@ -101,6 +104,7 @@ public class EnumGenerator {
     /**
      * 功能：驼峰转大写下划线，并去掉_ENUM
      * 如：SectionChargeEnum 变成 SECTION_CHARGE
+     *
      * @param str
      * @return
      */
@@ -112,6 +116,7 @@ public class EnumGenerator {
     /**
      * 驼峰转下划线，第一位是下划线
      * 如：SectionChargeEnum 变成 _section_charge_enum
+     *
      * @param str
      * @return
      */
@@ -119,11 +124,11 @@ public class EnumGenerator {
         Pattern pattern = Pattern.compile("[A-Z]");
         Matcher matcher = pattern.matcher(str);
         StringBuffer sb = new StringBuffer(str);
-        if(matcher.find()) {
+        if (matcher.find()) {
             sb = new StringBuffer();
-            matcher.appendReplacement(sb,"_"+matcher.group(0).toLowerCase());
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
             matcher.appendTail(sb);
-        }else {
+        } else {
             return sb;
         }
         return underline(sb.toString());

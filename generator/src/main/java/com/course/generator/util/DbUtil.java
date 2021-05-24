@@ -1,6 +1,7 @@
 package com.course.generator.util;
 
-import com.course.generator.server.enums.EnumGenerator;
+
+import com.course.generator.enums.EnumGenerator;
 
 import java.sql.*;
 import java.util.ArrayList;
