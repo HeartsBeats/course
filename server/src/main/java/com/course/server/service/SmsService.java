@@ -8,7 +8,7 @@ import com.course.server.enums.SmsStatusEnum;
 import com.course.server.exception.BusinessException;
 import com.course.server.exception.BusinessExceptionCode;
 import com.course.server.mapper.SmsMapper;
-import com.course.server.util.CopyUtil;
+import com.course.server.util.CopyUtils;
 import com.course.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -38,7 +38,7 @@ public class SmsService {
         List<Sms> smsList = smsMapper.selectByExample(smsExample);
         PageInfo<Sms> pageInfo = new PageInfo<>(smsList);
         pageDto.setTotal(pageInfo.getTotal());
-        List<SmsDto> smsDtoList = CopyUtil.copyList(smsList, SmsDto.class);
+        List<SmsDto> smsDtoList = CopyUtils.copyList(smsList, SmsDto.class);
         pageDto.setList(smsDtoList);
     }
 
@@ -46,7 +46,7 @@ public class SmsService {
      * 保存，id有值时更新，无值时新增
      */
     public void save(SmsDto smsDto) {
-        Sms sms = CopyUtil.copy(smsDto, Sms.class);
+        Sms sms = CopyUtils.copy(smsDto, Sms.class);
         if (StringUtils.isEmpty(smsDto.getId())) {
             this.insert(sms);
         } else {
@@ -90,7 +90,7 @@ public class SmsService {
         criteria.andMobileEqualTo(smsDto.getMobile())
                 .andUseEqualTo(smsDto.getUse())
                 .andStatusEqualTo(SmsStatusEnum.NOT_USED.getCode())
-                .andAtGreaterThan(new Date(new Date().getTime() - 1 * 60 * 1000));
+                .andAtGreaterThan(new Date(System.currentTimeMillis()- 1 * 60 * 1000));
         List<Sms> smsList = smsMapper.selectByExample(example);
 
         if (smsList == null || smsList.size() == 0) {
@@ -126,7 +126,7 @@ public class SmsService {
         SmsExample example = new SmsExample();
         SmsExample.Criteria criteria = example.createCriteria();
         // 查找5分钟内同手机号同操作发送记录
-        criteria.andMobileEqualTo(smsDto.getMobile()).andUseEqualTo(smsDto.getUse()).andAtGreaterThan(new Date(new Date().getTime() - 1 * 60 * 1000));
+        criteria.andMobileEqualTo(smsDto.getMobile()).andUseEqualTo(smsDto.getUse()).andAtGreaterThan(new Date(System.currentTimeMillis() - 1 * 60 * 1000));
         List<Sms> smsList = smsMapper.selectByExample(example);
 
         if (smsList != null && smsList.size() > 0) {

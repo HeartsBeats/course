@@ -1,129 +1,142 @@
 <template>
-  <div id="login-modal" className="modal fade" tabIndex="-1" role="dialog">
-    <div className="modal-dialog modal-login" role="document">
-      <div className="modal-content">
-        <div className="modal-body">
-          <div className="login-div" v-show="MODAL_STATUS === STATUS_LOGIN">
+  <div id="login-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-login" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="login-div" v-show="MODAL_STATUS === STATUS_LOGIN">
             <h3>登&nbsp;&nbsp;录</h3>
-            <div className="form-group">
-              <input v-model="member.mobile" className="form-control" placeholder="手机号">
+            <div class="form-group">
+              <input v-model="member.mobile" class="form-control" placeholder="手机号">
             </div>
-            <div className="form-group">
-              <input className="form-control" type="password" placeholder="密码" v-model="member.password">
+            <div class="form-group">
+              <input class="form-control" type="password" placeholder="密码" v-model="member.password">
             </div>
-            <div className="form-group">
-              <div className="input-group">
-                <input id="image-code-input" className="form-control" type="text" placeholder="验证码"
+            <div class="form-group">
+              <div class="input-group">
+                <input id="image-code-input" class="form-control" type="text" placeholder="验证码"
                        v-model="member.imageCode">
-                <div className="input-group-addon" id="image-code-addon">
+                <div class="input-group-addon" id="image-code-addon">
                   <img id="image-code" alt="验证码" v-on:click="loadImageCode()"/>
                 </div>
               </div>
             </div>
-            <div className="form-group">
-              <button v-on:click="login()" className="btn btn-primary btn-block submit-button">
+            <div class="form-group">
+              <button v-on:click="login()" class="btn btn-primary btn-block submit-button">
                 登&nbsp;&nbsp;录
               </button>
             </div>
-            <div className="form-group">
-              <div className="checkbox">
+            <div class="form-group">
+              <div class="checkbox">
                 <label>
-                  <input type="checkbox" className="remember" v-model="remember"> 记住密码
+                  <input type="checkbox" class="remember" v-model="remember"> 记住密码
                 </label>
-                <div className="pull-right">
+                <div class="pull-right">
                   <a href="javascript:;" v-on:click="toForgetDiv()">忘记密码</a>&nbsp;
                   <a href="javascript:;" v-on:click="toRegisterDiv()">我要注册</a>
                 </div>
               </div>
             </div>
-            <div className="form-group to-register-div">
+            <div class="form-group to-register-div">
             </div>
           </div>
-          <div className="register-div" v-show="MODAL_STATUS === STATUS_REGISTER">
+          <div class="register-div" v-show="MODAL_STATUS === STATUS_REGISTER">
             <h3>注&nbsp;&nbsp;册</h3>
-            <div className="form-group">
+            <div class="form-group">
               <input v-on:blur="onRegisterMobileBlur()"
                      v-bind:class="registerMobileValidateClass"
                      id="register-mobile" v-model="memberRegister.mobile"
-                     className="form-control" placeholder="手机号">
-              <span v-show="registerMobileValidate === false" className="text-danger">手机号11位数字，且不能重复</span>
+                     class="form-control" placeholder="手机号">
+              <span v-show="registerMobileValidate === false" class="text-danger">手机号11位数字，且不能重复</span>
             </div>
-            <div className="form-group">
-              <div className="input-group">
+            <div class="form-group">
+              <div class="input-group">
                 <input v-on:blur="onRegisterMobileCodeBlur()"
                        v-bind:class="registerMobileCodeValidateClass"
-                       id="register-mobile-code" className="form-control"
-                       placeholder="手机验证码" v-model="memberRegister.code">
-                <div className="input-group-append">
-                  <button className="btn btn-outline-secondary" id="register-send-code-btn"
+                       id="register-mobile-code" class="form-control"
+                       placeholder="手机验证码" v-model="memberRegister.smsCode">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" id="register-send-code-btn"
                           v-on:click="sendSmsForRegister()">发送验证码
                   </button>
                 </div>
               </div>
-              <span v-show="registerMobileCodeValidate === false" className="text-danger">请输入短信6位验证码</span>
+              <span v-show="registerMobileCodeValidate === false" class="text-danger">请输入短信6位验证码</span>
             </div>
-            <div className="form-group">
+            <div class="form-group">
               <input v-on:blur="onRegisterNameBlur()"
                      v-bind:class="registerNameValidateClass"
                      id="register-name" v-model="memberRegister.name"
-                     className="form-control" placeholder="昵称">
-              <span v-show="registerNameValidate === false" className="text-danger">昵称2到20位中文，字母，数字，下划线组合</span>
+                     class="form-control" placeholder="昵称">
+              <span v-show="registerNameValidate === false" class="text-danger">昵称2到20位中文，字母，数字，下划线组合</span>
             </div>
-            <div className="form-group">
+            <div class="form-group">
               <input v-on:blur="onRegisterPasswordBlur()"
                      v-bind:class="registerPasswordValidateClass"
                      id="register-password" v-model="memberRegister.passwordOriginal"
-                     className="form-control" placeholder="密码" type="password">
-              <span v-show="registerPasswordValidate === false" className="text-danger">密码最少6位，包含至少1字母和1个数字</span>
+                     class="form-control" placeholder="密码" type="password">
+              <span v-show="registerPasswordValidate === false" class="text-danger">密码最少6位，包含至少1字母和1个数字</span>
             </div>
-            <div className="form-group">
+            <div class="form-group">
               <input v-on:blur="onRegisterConfirmPasswordBlur()"
                      v-bind:class="registerConfirmPasswordValidateClass"
                      id="register-confirm-password" v-model="memberRegister.confirm"
-                     className="form-control" placeholder="确认密码"
+                     class="form-control" placeholder="确认密码"
                      name="memberRegisterConfirm" type="password">
-              <span v-show="registerConfirmPasswordValidate === false" className="text-danger">确认密码和密码一致</span>
+              <span v-show="registerConfirmPasswordValidate === false" class="text-danger">确认密码和密码一致</span>
             </div>
-            <div className="form-group">
-              <button className="btn btn-primary btn-block submit-button" v-on:click="register()">
+            <div class="form-group">
+              <button class="btn btn-primary btn-block submit-button" v-on:click="register()">
                 注&nbsp;&nbsp;册
               </button>
             </div>
-            <div className="form-group to-login-div">
+            <div class="form-group to-login-div">
               <a href="javascript:;" v-on:click="toLoginDiv()">我要登录</a>
             </div>
           </div>
-          <div className="forget-div" v-show="MODAL_STATUS === STATUS_FORGET">
+          <div class="forget-div" v-show="MODAL_STATUS === STATUS_FORGET">
             <h3>忘记密码</h3>
-            <div className="form-group">
-              <input id="forget-mobile" v-model="memberForget.mobile"
-                     className="form-control" placeholder="手机号">
+            <div class="form-group">
+              <input v-on:blur="onForgetMobileBlur()"
+                     v-bind:class="forgetMobileValidateClass"
+                     id="forget-mobile" v-model="memberForget.mobile"
+                     class="form-control" placeholder="手机号">
+              <span v-show="forgetMobileValidate === false" class="text-danger">手机号11位数字，且必须已注册</span>
             </div>
-            <div className="form-group">
-              <div className="input-group">
-                <input id="forget-mobile-code" className="form-control"
-                       placeholder="手机验证码" v-model="memberForget.code">
-                <div className="input-group-append">
-                  <button className="btn btn-outline-secondary" id="forget-send-code-btn">
+            <div class="form-group">
+              <div class="input-group">
+                <input v-on:blur="onForgetMobileCodeBlur()"
+                       v-bind:class="forgetMobileCodeValidateClass"
+                       id="forget-mobile-code" class="form-control"
+                       placeholder="手机验证码" v-model="memberForget.smsCode">
+                <div class="input-group-append">
+                  <button v-on:click="sendSmsForForget()"
+                          class="btn btn-outline-secondary" id="forget-send-code-btn">
                     发送验证码
                   </button>
                 </div>
               </div>
+              <span v-show="forgetMobileCodeValidate === false" class="text-danger">请输入短信6位验证码</span>
             </div>
-            <div className="form-group">
-              <input id="forget-password" v-model="memberForget.passwordOriginal"
-                     className="form-control" placeholder="密码" type="password">
+            <div class="form-group">
+              <input v-on:blur="onForgetPasswordBlur()"
+                     v-bind:class="forgetPasswordValidateClass"
+                     id="forget-password" v-model="memberForget.passwordOriginal"
+                     class="form-control" placeholder="密码" type="password">
+              <span v-show="forgetPasswordValidate === false" class="text-danger">密码最少6位，包含至少1字母和1个数字</span>
             </div>
-            <div className="form-group">
-              <input id="forget-confirm-password" v-model="memberForget.confirm"
-                     className="form-control" placeholder="确认密码" type="password">
+            <div class="form-group">
+              <input v-on:blur="onForgetConfirmPasswordBlur()"
+                     v-bind:class="forgetConfirmPasswordValidateClass"
+                     id="forget-confirm-password" v-model="memberForget.confirm"
+                     class="form-control" placeholder="确认密码" type="password">
+              <span v-show="forgetConfirmPasswordValidate === false" class="text-danger">确认密码和密码一致</span>
             </div>
-            <div className="form-group">
-              <button className="btn btn-primary btn-block submit-button">
+            <div class="form-group">
+              <button v-on:click="resetPassword()" class="btn btn-primary btn-block submit-button">
                 重&nbsp;&nbsp;置
               </button>
             </div>
-            <div className="form-group to-login-div">
+            <div class="form-group to-login-div">
               <a href="javascript:;" v-on:click="toLoginDiv()">我要登录</a>
             </div>
           </div>
@@ -158,6 +171,12 @@ export default {
       registerPasswordValidate: null,
       registerNameValidate: null,
       registerConfirmPasswordValidate: null,
+
+      // 忘记密码框显示错误信息
+      forgetMobileValidate: null,
+      forgetMobileCodeValidate: null,
+      forgetPasswordValidate: null,
+      forgetConfirmPasswordValidate: null,
     }
   },
   computed: {
@@ -189,6 +208,30 @@ export default {
       return {
         'border-success': this.registerConfirmPasswordValidate === true,
         'border-danger': this.registerConfirmPasswordValidate === false,
+      }
+    },
+    forgetMobileValidateClass: function () {
+      return {
+        'border-success': this.forgetMobileValidate === true,
+        'border-danger': this.forgetMobileValidate === false,
+      }
+    },
+    forgetMobileCodeValidateClass: function () {
+      return {
+        'border-success': this.forgetMobileCodeValidate === true,
+        'border-danger': this.forgetMobileCodeValidate === false,
+      }
+    },
+    forgetPasswordValidateClass: function () {
+      return {
+        'border-success': this.forgetPasswordValidate === true,
+        'border-danger': this.forgetPasswordValidate === false,
+      }
+    },
+    forgetConfirmPasswordValidateClass: function () {
+      return {
+        'border-success': this.forgetConfirmPasswordValidate === true,
+        'border-danger': this.forgetConfirmPasswordValidate === false,
       }
     },
   },
@@ -382,6 +425,59 @@ export default {
       }, 1000);
     },
 
+    /**
+     * 发送忘记密码短信
+     */
+    sendSmsForForget() {
+      let _this = this;
+      if (!_this.onForgetMobileBlur()) {
+        return false;
+      }
+      let sms = {
+        mobile: _this.memberForget.mobile,
+        use: SMS_USE.FORGET.key
+      };
+
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/web/member/is-mobile-exist/' + _this.memberForget.mobile).then((res) => {
+        let response = res.data;
+        if (response.success) {
+          _this.forgetMobileValidate = true;
+          _this.sendSmsCode(sms, "forget-send-code-btn");
+        } else {
+          _this.forgetMobileValidate = false;
+          Toast.warning("手机号未注册");
+        }
+      });
+    },
+
+    resetPassword() {
+      let _this = this;
+
+      // 提交之前，先校验所有输入框
+      // 注意：当有一个文本框校验为false时，其它不校验
+      let validateResult = _this.onForgetMobileBlur() &&
+          _this.onForgetMobileCodeBlur() &&
+          _this.onForgetPasswordBlur() &&
+          _this.onForgetConfirmPasswordBlur();
+      if (!validateResult) {
+        return;
+      }
+
+      _this.memberForget.password = hex_md5(_this.memberForget.passwordOriginal + KEY);
+
+      // 调服务端密码重置接口
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member/reset-password', _this.memberForget).then((res) => {
+        let response = res.data;
+        if (response.success) {
+          Toast.success("密码重置成功");
+          _this.toLoginDiv();
+        } else {
+          Toast.warning(response.message);
+        }
+      }).catch((response) => {
+        console.log("error：", response);
+      })
+    },
 
     //-------------------------------- 注册框校验 ----------------------------
 
@@ -393,7 +489,7 @@ export default {
 
     onRegisterMobileCodeBlur() {
       let _this = this;
-      _this.registerMobileCodeValidate = Pattern.validateMobileCode(_this.memberRegister.code);
+      _this.registerMobileCodeValidate = Pattern.validateMobileCode(_this.memberRegister.smsCode);
       return _this.registerMobileValidate;
     },
 
@@ -417,6 +513,32 @@ export default {
       }
       return _this.registerConfirmPasswordValidate = (confirmPassword === _this.memberRegister.passwordOriginal);
     },
+
+    //-------------------------------- 忘记密码框校验 ----------------------------
+
+    onForgetMobileBlur() {
+      let _this = this;
+      return _this.forgetMobileValidate = Pattern.validateMobile(_this.memberForget.mobile);
+    },
+
+    onForgetMobileCodeBlur() {
+      let _this = this;
+      return _this.forgetMobileCodeValidate = Pattern.validateMobileCode(_this.memberForget.smsCode);
+    },
+
+    onForgetPasswordBlur() {
+      let _this = this;
+      return _this.forgetPasswordValidate = Pattern.validatePasswordWeak(_this.memberForget.passwordOriginal);
+    },
+
+    onForgetConfirmPasswordBlur() {
+      let _this = this;
+      let forgetPassword = $("#forget-confirm-password").val();
+      if (Tool.isEmpty(forgetPassword)) {
+        return _this.forgetConfirmPasswordValidate = false;
+      }
+      return _this.forgetConfirmPasswordValidate = (forgetPassword === _this.memberForget.passwordOriginal);
+    }
   }
 }
 </script>
