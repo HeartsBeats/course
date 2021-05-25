@@ -291,7 +291,7 @@ create table `resource` (
                             `parent` char(6) comment '父id',
                             primary key (`id`)
 ) engine=innodb default charset=utf8 comment='资源';
-
+insert into `resource` values ('00', '欢迎', 'welcome', null, null);
 insert into `resource` values ('01', '系统管理', null, null, null);
 insert into `resource` values ('0101', '用户管理', '/system/user', null, '01');
 insert into `resource` values ('010101', '保存', null, '["/system/admin/user/list", "/system/admin/user/save"]', '0101');
@@ -322,6 +322,7 @@ create table `role_resource` (
                                  primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='角色资源关联';
 
+insert into `role_resource` values ('00000009', '00000000', '00');
 insert into `role_resource` values ('00000000', '00000000', '01');
 insert into `role_resource` values ('00000001', '00000000', '0101');
 insert into `role_resource` values ('00000002', '00000000', '010101');
