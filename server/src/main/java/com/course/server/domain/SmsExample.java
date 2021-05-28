@@ -326,7 +326,7 @@ public class SmsExample {
         }
 
         public Criteria andUseEqualTo(String value) {
-            addCriterion("use =", value, "use");
+            addCriterion("`use` =", value, "use");
             return (Criteria) this;
         }
 

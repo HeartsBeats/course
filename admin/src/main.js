@@ -1,32 +1,46 @@
 import Vue from 'vue'
-import App from './app'
+import App from './app.vue'
 import router from './router'
-import axios from "axios";
-import filter from "./filter/filter"
+import axios from 'axios'
+import filter from './filter/filter'
 
 Vue.config.productionTip = false;
 Vue.prototype.$ajax = axios;
-/**
- * axios拦截器
- */
 
 // 解决每次ajax请求，对应的sessionId不一致的问题
 axios.defaults.withCredentials = true;
-// 请求拦截
+
+/**
+ * axios拦截器
+ */
 axios.interceptors.request.use(function (config) {
+  console.log("请求：", config);
   let token = Tool.getLoginUser().token;
   if (Tool.isNotEmpty(token)) {
     config.headers.token = token;
     console.log("请求headers增加token:", token);
   }
   return config;
-}, error => {
-
-});
+}, error => {});
 axios.interceptors.response.use(function (response) {
   console.log("返回结果：", response);
   return response;
 }, error => {
+  console.log("返回拦截：", error.response);
+  let response = error.response;
+  const status = response.status;
+  if (status === 401) {
+    // 判断状态码是401 跳转到登录
+    console.log("未登录，跳到登录页面");
+    Tool.setLoginUser(null);
+    router.push('/login');
+  }
+  return {
+    data: {
+      success: false,
+      message: "请重新登录"
+    }
+  };
 });
 
 // 全局过滤器
@@ -50,7 +64,10 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 new Vue({
   router,
   render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');
+
+console.log("环境：", process.env.NODE_ENV);

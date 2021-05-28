@@ -68,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, mobile, code, use, at, status
+    id, mobile, code, `use`, `at`, `status`
   </sql>
   <select id="selectByExample" parameterType="com.course.server.domain.SmsExample" resultMap="BaseResultMap">
     select
@@ -85,7 +85,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from sms
     where id = #{id,jdbcType=CHAR}
@@ -101,10 +101,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.course.server.domain.Sms">
-    insert into sms (id, mobile, code, use, 
-      at, status)
-    values (#{id,jdbcType=CHAR}, #{mobile,jdbcType=VARCHAR}, #{code,jdbcType=CHAR}, #{use,jdbcType=CHAR}, 
-      #{at,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
+    insert into sms (id, mobile, code, `use`,
+                     `at`, `status`)
+    values (#{id,jdbcType=CHAR}, #{mobile,jdbcType=VARCHAR}, #{code,jdbcType=CHAR}, #{use,jdbcType=CHAR},
+            #{at,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.course.server.domain.Sms">
     insert into sms
@@ -119,13 +119,13 @@
         code,
       </if>
       <if test="use != null">
-        use,
+        `use`,
       </if>
       <if test="at != null">
-        at,
+        `at`,
       </if>
       <if test="status != null">
-        status,
+        `status`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -168,13 +168,13 @@
         code = #{record.code,jdbcType=CHAR},
       </if>
       <if test="record.use != null">
-        use = #{record.use,jdbcType=CHAR},
+        `use` = #{record.use,jdbcType=CHAR},
       </if>
       <if test="record.at != null">
-        at = #{record.at,jdbcType=TIMESTAMP},
+        `at` = #{record.at,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        status = #{record.status,jdbcType=CHAR},
+        `status` = #{record.status,jdbcType=CHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -184,11 +184,11 @@
   <update id="updateByExample" parameterType="map">
     update sms
     set id = #{record.id,jdbcType=CHAR},
-      mobile = #{record.mobile,jdbcType=VARCHAR},
-      code = #{record.code,jdbcType=CHAR},
-      use = #{record.use,jdbcType=CHAR},
-      at = #{record.at,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=CHAR}
+    mobile = #{record.mobile,jdbcType=VARCHAR},
+    code = #{record.code,jdbcType=CHAR},
+    `use` = #{record.use,jdbcType=CHAR},
+    `at` = #{record.at,jdbcType=TIMESTAMP},
+    `status` = #{record.status,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -203,13 +203,13 @@
         code = #{code,jdbcType=CHAR},
       </if>
       <if test="use != null">
-        use = #{use,jdbcType=CHAR},
+        `use` = #{use,jdbcType=CHAR},
       </if>
       <if test="at != null">
-        at = #{at,jdbcType=TIMESTAMP},
+        `at` = #{at,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null">
-        status = #{status,jdbcType=CHAR},
+        `status` = #{status,jdbcType=CHAR},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
@@ -217,10 +217,11 @@
   <update id="updateByPrimaryKey" parameterType="com.course.server.domain.Sms">
     update sms
     set mobile = #{mobile,jdbcType=VARCHAR},
-      code = #{code,jdbcType=CHAR},
-      use = #{use,jdbcType=CHAR},
-      at = #{at,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=CHAR}
+        code = #{code,jdbcType=CHAR},
+        `use` = #{use,jdbcType=CHAR},
+        `at` = #{at,jdbcType=TIMESTAMP},
+        `status` = #{status,jdbcType=CHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>
+

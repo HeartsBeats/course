@@ -65,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, desc
+    id, `name`, `desc`
   </sql>
   <select id="selectByExample" parameterType="com.course.server.domain.RoleExample" resultMap="BaseResultMap">
     select
@@ -82,7 +82,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from role
     where id = #{id,jdbcType=CHAR}
@@ -98,7 +98,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.course.server.domain.Role">
-    insert into role (id, name, desc)
+    insert into role (id, `name`, `desc`)
     values (#{id,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.course.server.domain.Role">
@@ -108,10 +108,10 @@
         id,
       </if>
       <if test="name != null">
-        name,
+        `name`,
       </if>
       <if test="desc != null">
-        desc,
+        `desc`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -139,10 +139,10 @@
         id = #{record.id,jdbcType=CHAR},
       </if>
       <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.desc != null">
-        desc = #{record.desc,jdbcType=VARCHAR},
+        `desc` = #{record.desc,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,8 +152,8 @@
   <update id="updateByExample" parameterType="map">
     update role
     set id = #{record.id,jdbcType=CHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      desc = #{record.desc,jdbcType=VARCHAR}
+    `name` = #{record.name,jdbcType=VARCHAR},
+    `desc` = #{record.desc,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -162,18 +162,18 @@
     update role
     <set>
       <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="desc != null">
-        desc = #{desc,jdbcType=VARCHAR},
+        `desc` = #{desc,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=CHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.course.server.domain.Role">
     update role
-    set name = #{name,jdbcType=VARCHAR},
-      desc = #{desc,jdbcType=VARCHAR}
+    set `name` = #{name,jdbcType=VARCHAR},
+        `desc` = #{desc,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
 </mapper>

@@ -6,11 +6,12 @@
         刷新
       </button>
     </p>
+
     <div class="row">
       <div class="col-md-6">
-        <label for="resource-textarea"></label>
         <textarea id="resource-textarea" class="form-control" v-model="resourceStr" name="resource"
                   rows="10"></textarea>
+
         <br>
         <button id="save-btn" type="button" class="btn btn-primary" v-on:click="save()">
           保存
@@ -24,10 +25,7 @@
 </template>
 
 <script>
-import Pagination from "../../components/pagination";
-
 export default {
-  components: {Pagination},
   name: "system-resource",
   data: function () {
     return {
@@ -39,7 +37,6 @@ export default {
   },
   mounted: function () {
     let _this = this;
-    _this.$refs.pagination.size = 5;
     _this.list();
     // sidebar激活样式方法一
     // this.$parent.activeSidebar("system-resource-sidebar");
@@ -52,11 +49,11 @@ export default {
     list() {
       let _this = this;
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree', {}).then((response) => {
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree').then((res) => {
         Loading.hide();
-        let resp = response.data;
-        _this.resources = resp.content;
-        //初始化树
+        let response = res.data;
+        _this.resources = response.content;
+        // 初始化树
         _this.initTree();
       })
     },

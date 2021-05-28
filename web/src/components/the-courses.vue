@@ -19,26 +19,26 @@
 </template>
 
 <script>
-  export default {
-    name: 'the-course',
-    props: {
-      course: {}
-    },
-    data: function () {
-      return {
-        COURSE_LEVEL: COURSE_LEVEL
-      }
-    },
-  }
+export default {
+  name: 'the-course',
+  props: {
+    course: {}
+  },
+  data: function () {
+    return {
+      COURSE_LEVEL: COURSE_LEVEL
+    }
+  },
+}
 </script>
 
 <style>
-  .course h4 {
-    font-size: 1.25rem;
-    margin: 15px 0;
-  }
+.course h4 {
+  font-size: 1.25rem;
+  margin: 15px 0;
+}
 
-  .course .text-muted .badge {
-    font-size: 1rem;
-  }
+.course .text-muted .badge {
+  font-size: 1rem;
+}
 </style>

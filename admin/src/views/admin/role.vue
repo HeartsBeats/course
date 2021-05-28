@@ -31,6 +31,9 @@
         <td>{{ role.desc }}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
+            <button v-on:click="editUser(role)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-user bigger-120"></i>
+            </button>
             <button v-on:click="editResource(role)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-list bigger-120"></i>
             </button>
@@ -103,6 +106,7 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
     <!-- 角色用户关联配置 -->
     <div id="user-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
@@ -172,6 +176,8 @@ export default {
       roles: [],
       resources: [],
       zTree: {},
+      users: [],
+      roleUsers: []
     }
   },
   mounted: function () {
@@ -315,6 +321,7 @@ export default {
       _this.zTree = $.fn.zTree.init($("#tree"), setting, _this.resources);
       _this.zTree.expandAll(true);
     },
+
     /**
      * 资源模态框点击【保存】
      */
@@ -341,6 +348,7 @@ export default {
         }
       });
     },
+
     /**
      * 加载角色资源关联记录
      */
@@ -358,6 +366,7 @@ export default {
         }
       });
     },
+
     /**
      * 点击【用户】
      */
@@ -381,7 +390,6 @@ export default {
         if (resp.success) {
           _this.users = resp.content.list;
           _this.listRoleUser();
-          console.log(_this.users)
         } else {
           Toast.warning(resp.message);
         }

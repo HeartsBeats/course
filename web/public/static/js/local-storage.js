@@ -1,4 +1,4 @@
-LOCAL_KEY_REMEMBER_USER = "LOCAL_KEY_REMEMBER_USER";
+LOCAL_KEY_REMEMBER_MEMBER = "LOCAL_KEY_REMEMBER_MEMBER"; // 记住我
 
 LocalStorage = {
   get: function (key) {

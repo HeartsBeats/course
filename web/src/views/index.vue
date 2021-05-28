@@ -1,11 +1,11 @@
 <template>
   <main role="main">
 
-    <section className="jumbotron text-center">
-      <div className="container">
+    <section class="jumbotron text-center">
+      <div class="container">
         <h1>在线视频课程平台</h1>
-        <p className="lead text-muted m-3">
-          知识付费时代刚刚起步，在这个领域有很多的发展机会。
+        <p class="lead text-muted m-3">
+          知识付费时代刚刚起步，在这个领域有很多的发展机会。整个课程以实战为基础，手把手从零开始，一步一步搭建一个完整的企业级开发架构。不讲废话，只讲干货。
         </p>
         <p>
           <router-link to="/list" class="btn btn-primary my-2 p-3 font-weight-bold">点击进入所有课程</router-link>
@@ -13,10 +13,10 @@
       </div>
     </section>
 
-    <div className="album py-5 bg-light">
-      <div className="container">
-        <div className="title1">最新上线</div>
-        <div className="row">
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="title1">最新上线</div>
+        <div class="row">
           <div v-for="o in news" class="col-md-4">
             <the-course v-bind:course="o"></the-course>
           </div>
@@ -24,8 +24,8 @@
 
         <hr>
 
-        <div className="title2">好课推荐</div>
-        <div className="row">
+        <div class="title2">好课推荐</div>
+        <div class="row">
           <div v-for="o in news" class="col-md-4">
             <the-course v-bind:course="o"></the-course>
           </div>
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-import TheCourse from "../components/the-course";
+
+import TheCourse from "../components/the-courses";
+
 export default {
   name: 'index',
   components: {TheCourse},
@@ -56,11 +58,22 @@ export default {
      */
     listNew() {
       let _this = this;
+
+      // 新上好课不经常变，又经常被访问，适合用缓存
+      // 判断是否有缓存
+      let news = SessionStorage.get("news");
+      if (!Tool.isEmpty(news)) {
+        _this.news = news;
+        return;
+      }
+
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/web/course/list-new').then((response) => {
         console.log("查询新上好课结果：", response);
         let resp = response.data;
         if (resp.success) {
           _this.news = resp.content;
+          // 保存到缓存
+          SessionStorage.set("news", _this.news);
         }
       }).catch((response) => {
         console.log("error：", response);
@@ -85,23 +98,5 @@ export default {
   -webkit-text-stroke: 1px black;
   letter-spacing: 0.04em;
   font-size: 2rem;
-}
-
-.course h4 {
-  font-size: 1.25rem;
-  margin: 15px 0;
-}
-
-.course .text-muted .badge {
-  font-size: 1rem;
-}
-
-.course h4 {
-  font-size: 1.25rem;
-  margin: 15px 0;
-}
-
-.course .text-muted .badge {
-  font-size: 1rem;
 }
 </style>

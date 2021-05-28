@@ -10,11 +10,10 @@
 
 <script>
 import TheHeader from "./components/the-header";
-import TheFooter from "./components/the-footer"
+import TheFooter from "./components/the-footer";
 
 export default {
   name: 'app',
-  components: {TheHeader, TheFooter},
-
+  components: {TheFooter, TheHeader},
 }
 </script>
