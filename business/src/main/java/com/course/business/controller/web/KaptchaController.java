@@ -1,4 +1,4 @@
-package com.course.business.controller.web;
+package com.course.system.controller.admin;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,11 @@ import java.io.ByteArrayOutputStream;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/web/kaptcha")
+@RequestMapping("/admin/kaptcha")
 public class KaptchaController {
+    public static final String BUSINESS_NAME = "图片验证码";
 
-    @Qualifier("getWebKaptcha")
+    @Qualifier("getDefaultKaptcha")
     @Autowired
     DefaultKaptcha defaultKaptcha;
 
@@ -35,12 +36,7 @@ public class KaptchaController {
         try {
             // 生成验证码字符串
             String createText = defaultKaptcha.createText();
-
-            // 将生成的验证码放入会话缓存中，后续验证的时候用到
-            // request.getSession().setAttribute(imageCodeToken, createText);
-            // 将生成的验证码放入redis缓存中，后续验证的时候用到
             redisTemplate.opsForValue().set(imageCodeToken, createText, 300, TimeUnit.SECONDS);
-
             // 使用验证码字符串生成验证码图片
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -48,7 +44,6 @@ public class KaptchaController {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-
         // 定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
         byte[] captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
         httpServletResponse.setHeader("Cache-Control", "no-store");

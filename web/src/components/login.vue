@@ -53,7 +53,7 @@
                 <input v-on:blur="onRegisterMobileCodeBlur()"
                        v-bind:class="registerMobileCodeValidateClass"
                        id="register-mobile-code" class="form-control"
-                       placeholder="手机验证码" v-model="memberRegister.smsCode">
+                       placeholder="手机验证码" v-model="smsCode">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary" id="register-send-code-btn"
                           v-on:click="sendSmsForRegister()">发送验证码
@@ -159,7 +159,8 @@ export default {
       MODAL_STATUS: "",
 
       member: {},
-      memberForget: {},
+      memberForget: { },
+      smsCode: "",
       memberRegister: {},
 
       remember: true, // 记住密码
@@ -288,12 +289,13 @@ export default {
       }
 
       _this.memberRegister.password = hex_md5(_this.memberRegister.passwordOriginal + KEY);
-
+      _this.memberRegister.smsCode = _this.smsCode;
       // 调服务端注册接口
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member/register', _this.memberRegister).then((response) => {
         let resp = response.data;
         if (resp.success) {
           Toast.success("注册成功");
+          $("#login-modal").modal("hide");
         } else {
           Toast.warning(resp.message);
         }
@@ -354,7 +356,7 @@ export default {
     loadImageCode: function () {
       let _this = this;
       _this.imageCodeToken = Tool.uuid(8);
-      $('#image-code').attr('src', process.env.VUE_APP_SERVER + '/business/web/kaptcha/image-code/' + _this.imageCodeToken);
+      $('#image-code').attr('src', process.env.VUE_APP_SERVER + '/system/admin/kaptcha/image-code/' + _this.imageCodeToken);
     },
 
     /**
@@ -398,6 +400,7 @@ export default {
           // 开始倒计时
           _this.countdown = 60;
           _this.setTime(btnId);
+          _this.smsCode = response.code;
         } else {
           Toast.warning(response.message);
         }

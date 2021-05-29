@@ -35,15 +35,18 @@
             <h3 class="search-title">
               <a href="#" class="blue">{{ course.name }}</a>
             </h3>
-            <div v-for="teacher in teachers.filter(t=>{return t.id===course.teacherId})" class="profile-activity clearfix">
+
+            <div v-for="teacher in teachers.filter(t=>{return t.id===course.teacherId})"
+                 class="profile-activity clearfix">
               <div>
                 <img v-show="!teacher.image" class="pull-left" src="/ace/assets/images/avatars/avatar5.png">
                 <img v-show="teacher.image" class="pull-left" v-bind:src="teacher.image">
-                <a class="user" href="#"> {{teacher.name}} </a>
+                <a class="user" href="#"> {{ teacher.name }} </a>
                 <br>
-                {{teacher.position}}
+                {{ teacher.position }}
               </div>
             </div>
+
             <p>
               <span class="blue bolder bigger-150">{{ course.price }}&nbsp;<i class="fa fa-rmb"></i></span>&nbsp;
             </p>
@@ -51,21 +54,21 @@
             <p>
               <span class="badge badge-info">{{ course.id }}</span>
               <span class="badge badge-info">排序：{{ course.sort }}</span>
-              <span class="badge badge-info">{{course.time | formatSecond}}</span>
+              <span class="badge badge-info">{{ course.time | formatSecond }}</span>
             </p>
             <p>
               <button v-on:click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
                 大章
-              </button>&nbsp;&nbsp;
+              </button>&nbsp;
               <button v-on:click="toContent(course)" class="btn btn-white btn-xs btn-info btn-round">
                 内容
-              </button>&nbsp;&nbsp;
+              </button>&nbsp;
               <button v-on:click="openSortModal(course)" class="btn btn-white btn-xs btn-info btn-round">
                 排序
-              </button>&nbsp;&nbsp;
+              </button>&nbsp;
               <button v-on:click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                 编辑
-              </button>&nbsp;&nbsp;
+              </button>&nbsp;
               <button v-on:click="del(course.id)" class="btn btn-white btn-xs btn-warning btn-round">
                 删除
               </button>
@@ -94,6 +97,21 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-2 control-label">封面</label>
+                <div class="col-sm-10">
+                  <big-file v-bind:input-id="'image-upload'"
+                            v-bind:text="'上传封面'"
+                            v-bind:suffixs="['jpg', 'jpeg', 'png']"
+                            v-bind:use="FILE_USE.COURSE.key"
+                            v-bind:after-upload="afterUpload"></big-file>
+                  <div v-show="course.image" class="row">
+                    <div class="col-md-6">
+                      <img v-bind:src="course.image" class="img-responsive">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
                   <input v-model="course.name" class="form-control">
@@ -103,7 +121,7 @@
                 <label class="col-sm-2 control-label">讲师</label>
                 <div class="col-sm-10">
                   <select v-model="course.teacherId" class="form-control">
-                    <option v-for="o in teachers" v-bind:value="o.id">{{o.name}}</option>
+                    <option v-for="o in teachers" v-bind:value="o.id">{{ o.name }}</option>
                   </select>
                 </div>
               </div>
@@ -123,22 +141,6 @@
                 <label class="col-sm-2 control-label">价格（元）</label>
                 <div class="col-sm-10">
                   <input v-model="course.price" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">封面</label>
-                <div class="col-sm-10">
-                    <big-file v-bind:use="FILE_USE.COURSE.key"
-                          v-bind:text="'上传封面'"
-                          v-bind:input-id="'image-upload'"
-                          v-bind:suffixs="['jpg','png','jpeg']"
-                          v-bind:after-upload="afterUpload">
-                    </big-file>
-                    <div v-show="course.image" class="row">
-                      <div class="col-md-6">
-                        <img v-bind:src="course.image" class="img-responsive">
-                      </div>
-                    </div>
                 </div>
               </div>
               <div class="form-group">
@@ -191,7 +193,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">排序</h4>
           </div>
           <div class="modal-body">
@@ -233,8 +236,9 @@
 <script>
 import Pagination from "../../components/pagination";
 import BigFile from "../../components/big-file";
+
 export default {
-  components: {Pagination,BigFile},
+  components: {Pagination, BigFile},
   name: "business-course",
   data: function () {
     return {
@@ -243,16 +247,16 @@ export default {
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_CHARGE: COURSE_CHARGE,
       COURSE_STATUS: COURSE_STATUS,
+      FILE_USE: FILE_USE,
       categorys: [],
       tree: {},
       saveContentLabel: "",
-      sort:{
-        id : "",
+      sort: {
+        id: "",
         oldSort: 0,
         newSort: 0
       },
       teachers: [],
-      FILE_USE: FILE_USE,
     }
   },
   mounted: function () {
@@ -271,7 +275,6 @@ export default {
      */
     add() {
       let _this = this;
-      // 在进行更新操作时，数据发生变化，故对应排序亦需发生变化
       _this.course = {
         sort: _this.$refs.pagination.total + 1
       };
@@ -310,7 +313,7 @@ export default {
     /**
      * 点击【保存】
      */
-    save() {
+    save(page) {
       let _this = this;
 
       // 保存校验
@@ -372,9 +375,14 @@ export default {
     },
 
     /**
-     * 查找所有分类
-     *
+     * 点击【内容】
      */
+    toContent(course) {
+      let _this = this;
+      SessionStorage.set(SESSION_KEY_COURSE, course);
+      _this.$router.push("/business/content");
+    },
+
     allCategory() {
       let _this = this;
       Loading.show();
@@ -387,9 +395,6 @@ export default {
       })
     },
 
-    /**
-     * 初始化树
-     */
     initTree() {
       let _this = this;
       let setting = {
@@ -436,9 +441,6 @@ export default {
       })
     },
 
-    /**
-     *  打开排序编辑
-     * */
     openSortModal(course) {
       let _this = this;
       _this.sort = {
@@ -472,9 +474,6 @@ export default {
       });
     },
 
-    /**
-     *  加载讲师列表
-     */
     allTeacher() {
       let _this = this;
       Loading.show();
@@ -485,26 +484,14 @@ export default {
       })
     },
 
-    /**
-     *  文件上传成功后
-     * @param resp
-     */
     afterUpload(resp) {
       let _this = this;
       let image = resp.content.path;
       _this.course.image = image;
+      // 解决不能实时预览的问题
+      _this.$forceUpdate();
     },
 
-    /**
-     *  跳转到内容编辑页面
-     * @param course
-     */
-    toContent(course) {
-      let _this = this;
-      //用于返回课程页面
-      SessionStorage.set(SESSION_KEY_COURSE, course);
-      _this.$router.push("/business/content");
-    },
   }
 }
 </script>

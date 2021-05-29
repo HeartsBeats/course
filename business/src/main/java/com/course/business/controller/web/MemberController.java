@@ -48,7 +48,6 @@ public class MemberController {
         ValidatorUtil.require(memberDto.getPassword(), "密码");
         ValidatorUtil.length(memberDto.getName(), "昵称", 1, 50);
         ValidatorUtil.length(memberDto.getPhoto(), "头像url", 1, 200);
-
         // 校验短信验证码
         SmsDto smsDto = new SmsDto();
         smsDto.setMobile(memberDto.getMobile());
@@ -58,7 +57,6 @@ public class MemberController {
         LOG.info("短信验证码校验通过");
         // 密码加密
         memberDto.setPassword(DigestUtils.md5DigestAsHex(memberDto.getPassword().getBytes()));
-
         ResponseDto responseDto = new ResponseDto();
         memberService.save(memberDto);
         responseDto.setContent(memberDto);
@@ -73,7 +71,6 @@ public class MemberController {
         LOG.info("用户登录开始");
         memberDto.setPassword(DigestUtils.md5DigestAsHex(memberDto.getPassword().getBytes()));
         ResponseDto responseDto = new ResponseDto();
-
         // 根据验证码token去获取缓存中的验证码，和用户输入的验证码是否一致
         String imageCode = (String) redisTemplate.opsForValue().get(memberDto.getImageCodeToken());
         LOG.info("从redis中获取到的验证码：{}", imageCode);
@@ -134,7 +131,6 @@ public class MemberController {
         LOG.info("会员密码重置开始:");
         memberDto.setPassword(DigestUtils.md5DigestAsHex(memberDto.getPassword().getBytes()));
         ResponseDto<MemberDto> responseDto = new ResponseDto();
-
         // 校验短信验证码
         SmsDto smsDto = new SmsDto();
         smsDto.setMobile(memberDto.getMobile());
@@ -142,7 +138,6 @@ public class MemberController {
         smsDto.setUse(SmsUseEnum.FORGET.getCode());
         smsService.validCode(smsDto);
         LOG.info("短信验证码校验通过");
-
         // 重置密码
         memberService.resetPassword(memberDto);
 

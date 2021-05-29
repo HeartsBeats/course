@@ -3,6 +3,7 @@ package com.course.business.controller.web;
 import com.course.server.dto.ResponseDto;
 import com.course.server.dto.SmsDto;
 import com.course.server.service.SmsService;
+import com.course.server.util.CopyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,8 @@ public class SmsController {
     public ResponseDto send(@RequestBody SmsDto smsDto) {
         LOG.info("发送短信请求开始: {}", smsDto);
         ResponseDto responseDto = new ResponseDto();
-        smsService.sendCode(smsDto);
+        String code = smsService.sendCode(smsDto);
+        responseDto.setCode(code);
         LOG.info("发送短信请求结束");
         return responseDto;
     }
