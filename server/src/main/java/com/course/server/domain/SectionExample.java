@@ -456,62 +456,62 @@ public class SectionExample {
         }
 
         public Criteria andTimeIsNull() {
-            addCriterion("time is null");
+            addCriterion("`time` is null");
             return (Criteria) this;
         }
 
         public Criteria andTimeIsNotNull() {
-            addCriterion("time is not null");
+            addCriterion("`time` is not null");
             return (Criteria) this;
         }
 
         public Criteria andTimeEqualTo(Integer value) {
-            addCriterion("time =", value, "time");
+            addCriterion("`time` =", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeNotEqualTo(Integer value) {
-            addCriterion("time <>", value, "time");
+            addCriterion("`time` <>", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeGreaterThan(Integer value) {
-            addCriterion("time >", value, "time");
+            addCriterion("`time` >", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("time >=", value, "time");
+            addCriterion("`time` >=", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeLessThan(Integer value) {
-            addCriterion("time <", value, "time");
+            addCriterion("`time` <", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeLessThanOrEqualTo(Integer value) {
-            addCriterion("time <=", value, "time");
+            addCriterion("`time` <=", value, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeIn(List<Integer> values) {
-            addCriterion("time in", values, "time");
+            addCriterion("`time` in", values, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeNotIn(List<Integer> values) {
-            addCriterion("time not in", values, "time");
+            addCriterion("`time` not in", values, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeBetween(Integer value1, Integer value2) {
-            addCriterion("time between", value1, value2, "time");
+            addCriterion("`time` between", value1, value2, "time");
             return (Criteria) this;
         }
 
         public Criteria andTimeNotBetween(Integer value1, Integer value2) {
-            addCriterion("time not between", value1, value2, "time");
+            addCriterion("`time` not between", value1, value2, "time");
             return (Criteria) this;
         }
 

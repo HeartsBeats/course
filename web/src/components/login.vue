@@ -16,7 +16,7 @@
                 <input id="image-code-input" class="form-control" type="text" placeholder="验证码"
                        v-model="member.imageCode">
                 <div class="input-group-addon" id="image-code-addon">
-                  <img id="image-code" alt="验证码" v-on:click="loadImageCode()"/>
+                  <img id="image-code" class="img" alt="验证码" v-on:click="loadImageCode()"/>
                 </div>
               </div>
             </div>
@@ -263,15 +263,15 @@ export default {
       // 显示登录框时就刷新一次验证码图片
       _this.loadImageCode();
 
-      _this.MODAL_STATUS = _this.STATUS_LOGIN
+      _this.MODAL_STATUS = _this.STATUS_LOGIN;
     },
     toRegisterDiv() {
       let _this = this;
-      _this.MODAL_STATUS = _this.STATUS_REGISTER
+      _this.MODAL_STATUS = _this.STATUS_REGISTER;
     },
     toForgetDiv() {
       let _this = this;
-      _this.MODAL_STATUS = _this.STATUS_FORGET
+      _this.MODAL_STATUS = _this.STATUS_FORGET;
     },
 
     register() {
@@ -287,7 +287,6 @@ export default {
       if (!validateResult) {
         return;
       }
-
       _this.memberRegister.password = hex_md5(_this.memberRegister.passwordOriginal + KEY);
       _this.memberRegister.smsCode = _this.smsCode;
       // 调服务端注册接口
@@ -446,6 +445,7 @@ export default {
         if (response.success) {
           _this.forgetMobileValidate = true;
           _this.sendSmsCode(sms, "forget-send-code-btn");
+          _this.smsCode = response.code;
         } else {
           _this.forgetMobileValidate = false;
           Toast.warning("手机号未注册");
@@ -553,6 +553,9 @@ export default {
   border: 0;
 }
 
+.img{
+  height: 45px;
+}
 #login-modal h3 {
   text-align: center;
   margin-bottom: 20px;

@@ -28,7 +28,6 @@ public class MemberCourseController {
         // 保存校验
         ValidatorUtil.require(memberCourseDto.getMemberId(), "会员id");
         ValidatorUtil.require(memberCourseDto.getCourseId(), "课程id");
-
         ResponseDto responseDto = new ResponseDto();
         memberCourseDto = memberCourseService.enroll(memberCourseDto);
         responseDto.setContent(memberCourseDto);

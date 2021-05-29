@@ -26,7 +26,7 @@
 
         <div class="title2">好课推荐</div>
         <div class="row">
-          <div v-for="o in news" class="col-md-4">
+          <div v-for="o in courses" class="col-md-4">
             <the-course v-bind:course="o"></the-course>
           </div>
         </div>
@@ -46,11 +46,13 @@ export default {
   data: function () {
     return {
       news: [],
+      courses: [],
     }
   },
   mounted() {
     let _this = this;
     _this.listNew();
+    _this.lists();
   },
   methods: {
     /**
@@ -74,6 +76,25 @@ export default {
           _this.news = resp.content;
           // 保存到缓存
           SessionStorage.set("news", _this.news);
+        }
+      }).catch((response) => {
+        console.log("error：", response);
+      })
+    },
+
+    /**
+     * 好课推荐
+     */
+    lists() {
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/course/list',{
+        page: 1,
+        size: 3,
+      }).then((response) => {
+        console.log("查询好课结果：", response);
+        let resp = response.data;
+        if (resp.success) {
+          _this.courses = resp.content.list;
         }
       }).catch((response) => {
         console.log("error：", response);

@@ -1,9 +1,11 @@
 package com.course.server.service;
 
+import com.course.server.domain.Course;
 import com.course.server.domain.MemberCourse;
 import com.course.server.domain.MemberCourseExample;
 import com.course.server.dto.MemberCourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.MemberCourseMapper;
 import com.course.server.util.CopyUtils;
 import com.course.server.util.UuidUtil;
@@ -22,6 +24,9 @@ public class MemberCourseService {
 
     @Resource
     private MemberCourseMapper memberCourseMapper;
+
+    @Resource
+    private CourseMapper courseMapper;
 
     /**
      * 列表查询
@@ -82,11 +87,16 @@ public class MemberCourseService {
         if (memberCourseDb == null) {
             MemberCourse memberCourse = CopyUtils.copy(memberCourseDto, MemberCourse.class);
             this.insert(memberCourse);
+            Course course = courseMapper.selectByPrimaryKey(memberCourseDto.getCourseId());
+            course.setEnroll(course.getEnroll()+1);
+            course.setUpdatedAt(new Date());
+            courseMapper.updateByPrimaryKey(course);
             // 将数据库信息全部返回，包括id, at
             return CopyUtils.copy(memberCourse, MemberCourseDto.class);
         } else {
             // 如果已经报名，则直接返回已报名的信息
             return CopyUtils.copy(memberCourseDb, MemberCourseDto.class);
+
         }
     }
 

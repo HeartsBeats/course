@@ -31,12 +31,17 @@ public class KaptchaController {
     public RedisTemplate redisTemplate;
 
     @GetMapping("/image-code/{imageCodeToken}")
-    public void imageCode(@PathVariable(value = "imageCodeToken") String imageCodeToken, HttpServletRequest request, HttpServletResponse httpServletResponse) throws Exception {
+    public void imageCode(@PathVariable(value = "imageCodeToken") String imageCodeToken, HttpServletRequest request, HttpServletResponse httpServletResponse) throws Exception{
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
             // 生成验证码字符串
             String createText = defaultKaptcha.createText();
+
+            // 将生成的验证码放入会话缓存中，后续验证的时候用到
+            // request.getSession().setAttribute(imageCodeToken, createText);
+            // 将生成的验证码放入redis缓存中，后续验证的时候用到
             redisTemplate.opsForValue().set(imageCodeToken, createText, 300, TimeUnit.SECONDS);
+
             // 使用验证码字符串生成验证码图片
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -44,6 +49,7 @@ public class KaptchaController {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
+
         // 定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
         byte[] captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
         httpServletResponse.setHeader("Cache-Control", "no-store");

@@ -550,8 +550,7 @@ export default {
     // console.log("admin");
     // sidebar激活样式方法二
     _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
-
-    $.getScript('/ace/assets/js/ace.min.js');
+    // $.getScript('/ace/assets/js/ace.min.js');
     _this.loginUser = Tool.getLoginUser();
     if (!_this.hasResourceRouter(_this.$route.name)) {
       _this.$router.push("/login");

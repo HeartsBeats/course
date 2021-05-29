@@ -55,10 +55,10 @@ public class CourseService {
      */
     public void list(CoursePageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        List<CourseDto> courseDtoList = myCourseMapper.list(pageDto);
-        PageInfo<CourseDto> pageInfo = new PageInfo<>(courseDtoList);
-        pageDto.setTotal(pageInfo.getTotal());
-        pageDto.setList(courseDtoList);
+        CourseExample courseExample = new CourseExample();
+        courseExample.setOrderByClause("enroll desc");
+        List<Course> courseList = courseMapper.selectByExample(courseExample);
+        pageDto.setList(courseList);
     }
 
     /**
@@ -142,7 +142,7 @@ public class CourseService {
     /**
      * 保存课程内容
      *
-     * @param courseId
+     * @param contentDto
      * @return
      */
     public int saveContent(CourseContentDto contentDto) {

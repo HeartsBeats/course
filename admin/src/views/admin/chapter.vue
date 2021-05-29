@@ -203,13 +203,13 @@ export default {
      */
     save(page) {
       let _this = this;
+      _this.chapter.courseId = _this.course.id;
       // 保存校验
       if (!Validator.require(_this.chapter.name, "名称")
           || !Validator.require(_this.chapter.courseId, "课程ID")
           || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
         return;
       }
-      _this.chapter.courseId = _this.course.id;
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/chapter/save', _this.chapter).then((response) => {
         console.log("保存大章列表结果：", response);

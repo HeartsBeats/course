@@ -202,6 +202,7 @@ export default {
         if (resp.success) {
           _this.memberCourse = resp.content;
           Toast.success("报名成功！");
+          _this.findCourse();
         } else {
           Toast.warning(resp.message);
         }

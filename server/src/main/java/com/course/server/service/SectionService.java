@@ -33,10 +33,10 @@ public class SectionService {
         PageHelper.startPage(sectionPageDto.getPage(), sectionPageDto.getSize());
         SectionExample sectionExample = new SectionExample();
         SectionExample.Criteria criteria = sectionExample.createCriteria();
-        if (StringUtils.isEmpty(sectionPageDto.getCourseId())) {
+        if (!StringUtils.isEmpty(sectionPageDto.getCourseId())) {
             criteria.andCourseIdEqualTo(sectionPageDto.getCourseId());
         }
-        if (StringUtils.isEmpty(sectionPageDto.getChapterId())) {
+        if (!StringUtils.isEmpty(sectionPageDto.getChapterId())) {
             criteria.andChapterIdEqualTo(sectionPageDto.getChapterId());
         }
         sectionExample.setOrderByClause("sort asc");
