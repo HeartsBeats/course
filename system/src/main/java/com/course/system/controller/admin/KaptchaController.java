@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/admin/kaptcha")
 public class KaptchaController {
-
     public static final String BUSINESS_NAME = "图片验证码";
 
     @Qualifier("getDefaultKaptcha")
@@ -37,10 +36,6 @@ public class KaptchaController {
         try {
             // 生成验证码字符串
             String createText = defaultKaptcha.createText();
-
-            /*
-             *  将生成的验证码放入redis缓存中，后续验证的时候用到,让应用成为无状态应用
-             */
             redisTemplate.opsForValue().set(imageCodeToken, createText, 300, TimeUnit.SECONDS);
             // 使用验证码字符串生成验证码图片
             BufferedImage challenge = defaultKaptcha.createImage(createText);
